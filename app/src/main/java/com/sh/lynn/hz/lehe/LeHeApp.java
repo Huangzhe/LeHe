@@ -3,6 +3,7 @@ package com.sh.lynn.hz.lehe;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.sh.lynn.hz.lehe.base.AppComponent;
 import com.sh.lynn.hz.lehe.base.AppModule;
 import com.sh.lynn.hz.lehe.base.DaggerAppComponent;
@@ -21,7 +22,7 @@ public class LeHeApp  extends Application{
     public void onCreate() {
         super.onCreate();
         appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-
+        Fresco.initialize(this);
     }
 
     public AppComponent getAppComponent(){

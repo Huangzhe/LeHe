@@ -45,4 +45,6 @@ dependencies {
     apt 'com.google.dagger:dagger-compiler:2.2'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    compile 'com.facebook.fresco:fresco:0.12.0'
 }

@@ -1,14 +1,14 @@
 package com.sh.lynn.hz.lehe.module.photos;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.sh.lynn.hz.lehe.R;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<Photos> mValues;
-Context mCtx;
+    Context mCtx;
 
     public MyItemRecyclerViewAdapter(List<Photos> items, Context ctx) {
         mValues = items;
@@ -37,14 +37,17 @@ Context mCtx;
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.tv_title.setText(mValues.get(position).getTitle());
-      //  holder.mContentView.setText(mValues.get(position).content);
-       // holder.
-        Glide.with(mCtx)
-                .load(mValues.get(position).getPicUrl())
-                .dontAnimate()
-                .placeholder(R.mipmap.icon_hun_normal)
-                .into(holder.iv_photo);
-
+        //  holder.mContentView.setText(mValues.get(position).content);
+        // holder.
+//        Glide.with(mCtx)
+//                .load(mValues.get(position).getPicUrl())
+//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                .placeholder(R.mipmap.icon_hun_normal)
+//                .thumbnail(1f)
+//
+//                .into(holder.iv_photo);
+        Uri uri = Uri.parse(mValues.get(position).getPicUrl());
+        holder.iv_photo.setImageURI(uri);
     }
 
     @Override
@@ -55,14 +58,14 @@ Context mCtx;
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView tv_title;
-        public final ImageView iv_photo;
+        public final SimpleDraweeView iv_photo;
         public Photos mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             tv_title = (TextView) view.findViewById(R.id.tv_title);
-            iv_photo = (ImageView) view.findViewById(R.id.iv_photo);
+            iv_photo = (SimpleDraweeView) view.findViewById(R.id.iv_photo);
         }
 
         @Override
