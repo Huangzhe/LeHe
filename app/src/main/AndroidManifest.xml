@@ -3,6 +3,7 @@
           package="com.sh.lynn.hz.lehe">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".LeHeApp"
         android:allowBackup="true"
@@ -14,15 +15,24 @@
             android:name=".module.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+        <meta-data
+            android:name="com.sh.lynn.hz.lehe.base.MyGlideMoudle"
+            android:value="GlideModule"/>
+
+        <activity
+            android:name=".module.lines.WelcomePageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_welcome_page"
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <meta-data
-            android:name="com.sh.lynn.hz.lehe.base.MyGlideMoudle"
-            android:value="GlideModule"/>
     </application>
 
 </manifest>

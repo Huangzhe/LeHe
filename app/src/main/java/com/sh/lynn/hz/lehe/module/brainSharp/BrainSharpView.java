@@ -12,4 +12,6 @@ public interface BrainSharpView {
     void showLoading();
 
     void closedLoading();
+
+    void showResult();
 }

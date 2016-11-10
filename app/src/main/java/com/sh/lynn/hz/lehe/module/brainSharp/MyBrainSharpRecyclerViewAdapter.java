@@ -10,6 +10,7 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sh.lynn.hz.lehe.R;
@@ -40,15 +41,15 @@ public class MyBrainSharpRecyclerViewAdapter extends RecyclerView.Adapter<MyBrai
         holder.mItem = mValues.get(position);
         String q = mValues.get(position).getQuest();
         String r = mValues.get(position).getResult();
-        SpannableString spannableString = new SpannableString(q+"\n\n"+r);
+        SpannableString spannableString = new SpannableString(q);
         spannableString.setSpan(new RelativeSizeSpan(0.8f), 0, q.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new ForegroundColorSpan(Color.GRAY), 0, q.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), 0, q.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+       spannableString.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), 0, q.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 
 
         holder.mContentView.setText(spannableString);
-       // holder.mContentView.setText(mValues.get(position).getQuest()+"\n"+mValues.get(position).getResult());
+       holder.mResultView.setText(r);
 
 
     }
@@ -61,14 +62,30 @@ public class MyBrainSharpRecyclerViewAdapter extends RecyclerView.Adapter<MyBrai
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
-     //   public final TextView mContentView;
+        public final TextView mResultView;
+        public final ImageView mImageView;
         public BrainSharp.NewslistBean mItem;
-
+        private boolean isShow=false;
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.tv_question);
-           // mContentView = (TextView) view.findViewById(R.id.content);
+            mResultView = (TextView) view.findViewById(R.id.tv_result);
+            mImageView = (ImageView) view.findViewById(R.id.iv_showResult);
+            mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isShow){
+                        mResultView.setVisibility(View.GONE);
+                        mImageView.setImageResource(android.R.drawable.arrow_down_float);
+                        isShow=false;
+                    }else{
+                        mResultView.setVisibility(View.VISIBLE);
+                        mImageView.setImageResource(android.R.drawable.arrow_up_float);
+                        isShow= true;
+                    }
+                }
+            });
         }
 
         @Override

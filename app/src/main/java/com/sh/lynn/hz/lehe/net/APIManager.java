@@ -2,12 +2,15 @@ package com.sh.lynn.hz.lehe.net;
 
 import android.app.Application;
 
+import com.sh.lynn.hz.lehe.base.Constant;
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharp;
+import com.sh.lynn.hz.lehe.module.lines.Lines;
 import com.sh.lynn.hz.lehe.module.photos.Photos;
 
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -59,5 +62,11 @@ public class APIManager {
                 .subscribe(new ExceptionSubscriber<List<Photos>>(callback, application));
     }
 
+
+    public Subscription getLines(SimpleCallback<Lines> callback){
+       return apiService.getLines(Constant.APIKEY,"json").subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ExceptionSubscriber<Lines>(callback,application));
+    }
 
 }

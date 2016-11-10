@@ -2,10 +2,12 @@ package com.sh.lynn.hz.lehe.net;
 
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharp;
 import com.sh.lynn.hz.lehe.module.joker.Joker;
+import com.sh.lynn.hz.lehe.module.lines.Lines;
 import com.sh.lynn.hz.lehe.module.photos.Photos;
 
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Query;
@@ -35,5 +37,8 @@ public interface ApiService {
 
     //
     @GET("acman/zhaiyanapi/tcrand")
-    Observable<List<Joker>> getLines(@Query("key") String apikey, @Query("page") String page);
+    Observable<Lines> getLines(@Header("apikey") String apikey, @Query("fangfa") String fangfa);
+
+    @GET("acman/zhaiyanapi/tcrand")
+    Call<Lines> getWords(@Header("apikey") String apikey, @Query("fangfa") String fangfa);
 }

@@ -111,5 +111,10 @@ public class BrainSharpFragment extends Fragment implements BrainSharpView{
 
     }
 
+    @Override
+    public void showResult() {
+
+    }
+
 
 }

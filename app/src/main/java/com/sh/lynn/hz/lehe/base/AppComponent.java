@@ -2,6 +2,8 @@ package com.sh.lynn.hz.lehe.base;
 
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharpComponent;
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharpModule;
+import com.sh.lynn.hz.lehe.module.lines.WelcPageComponent;
+import com.sh.lynn.hz.lehe.module.lines.WelcPageModule;
 import com.sh.lynn.hz.lehe.module.photos.PhotoModule;
 import com.sh.lynn.hz.lehe.module.photos.PhotosCompoment;
 import com.sh.lynn.hz.lehe.net.ApiModule;
@@ -18,4 +20,5 @@ import dagger.Component;
 public interface AppComponent {
     BrainSharpComponent plus(BrainSharpModule module);
     PhotosCompoment plus(PhotoModule module);
+    WelcPageComponent plus(WelcPageModule module);
 }
