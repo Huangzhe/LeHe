@@ -1,14 +1,24 @@
 package com.sh.lynn.hz.lehe.net;
 
 import android.app.Application;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.sh.lynn.hz.lehe.base.Constant;
+import com.sh.lynn.hz.lehe.base.PreferencesManager;
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharp;
+import com.sh.lynn.hz.lehe.module.joker.Joker;
 import com.sh.lynn.hz.lehe.module.lines.Lines;
 import com.sh.lynn.hz.lehe.module.photos.Photos;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -69,4 +79,52 @@ public class APIManager {
                 .subscribe(new ExceptionSubscriber<Lines>(callback,application));
     }
 
+    public Call<Lines> getWords(final   SimpleCallback<Lines> callback){
+       Call<Lines> call = apiService.getWords(Constant.APIKEY,"json");
+
+        call.enqueue(new Callback<Lines>() {
+            @Override
+            public void onResponse(Call<Lines> call, Response<Lines> response) {
+                Log.e("result",response.body().getTaici());
+                callback.onNext(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<Lines> call, Throwable t) {
+
+            }
+        });
+        return  call;
+    }
+
+    public Subscription getJokers(final PreferencesManager mPreferencesManager, SimpleCallback<List<Joker>> callback){
+        return apiService.getJokersYY(Constant.APIKEY,mPreferencesManager.getCurJokerIndex()+"")
+               .flatMap(new Func1<JsonObject, Observable<List<Joker>>>() {
+                   @Override
+                   public Observable<List<Joker>> call(JsonObject json) {
+
+                       if(json!=null&&json.get("showapi_res_code").getAsString().equals("0")){
+
+                           mPreferencesManager.saveJokerIndex(mPreferencesManager.getCurJokerIndex()+1,json.getAsJsonObject("showapi_res_body").get("allPages").getAsInt());
+
+                           JsonArray jokerArray = json.getAsJsonObject("showapi_res_body").getAsJsonArray("contentlist");
+
+                           if(jokerArray!=null){
+                               Gson gson = new Gson();
+                               List<Joker> list =    gson.fromJson(jokerArray.toString(),new TypeToken<List<Joker>>(){}.getType());
+                           return Observable.just(list);
+
+                           }else{
+                               return Observable.error(new Throwable("未获取到数据"));
+                           }
+
+                       }
+                       return Observable.error(new Throwable(json==null?"未获取到数据":json.get("showapi_res_error").toString()));
+                   }
+               })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ExceptionSubscriber<List<Joker>>(callback,application));
+    }
 }

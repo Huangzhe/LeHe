@@ -48,11 +48,13 @@ public class WelcPagePresenter {
                 mWelcPageView.closedLoading();
             }
         });
+
+       // apiManager.getWords()
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                //apiManager.c
-                subscription.unsubscribe();
+              subscription.unsubscribe();
+               // call.cancel();
                 goToMainView();
             }
         },3000);

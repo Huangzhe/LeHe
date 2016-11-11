@@ -9,9 +9,6 @@ import java.net.SocketTimeoutException;
 import rx.Subscriber;
 
 /**
- * 错误统一处理
- *
- * Created by wanglj on 16/7/4.
  */
 
 public class ExceptionSubscriber<T> extends Subscriber<T> {

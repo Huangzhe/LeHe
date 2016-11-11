@@ -1,11 +1,9 @@
 package com.sh.lynn.hz.lehe.net;
 
+import com.google.gson.JsonObject;
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharp;
-import com.sh.lynn.hz.lehe.module.joker.Joker;
 import com.sh.lynn.hz.lehe.module.lines.Lines;
 import com.sh.lynn.hz.lehe.module.photos.Photos;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -26,7 +24,7 @@ public interface ApiService {
 
     //笑话 易源
     @GET("showapi_open_bus/showapi_joke/joke_text")
-    Observable<List<Joker>> getJokersYY(@Header("apikey") String apikey, @Query("page") String page);
+    Observable<JsonObject> getJokersYY(@Header("apikey") String apikey, @Query("page") String page);
 
     //http://api.tianapi.com/meinv/?key=870400af7aa7368475528367c434c959&num=10
 
