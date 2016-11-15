@@ -56,9 +56,9 @@ public class APIManager {
                 .subscribe(new ExceptionSubscriber<List<BrainSharp.NewslistBean>>(callback, application));
     }
 
-    public void getPhotos(String key, int page ,SimpleCallback<List<Photos>> callback) {
+    public void getPhotos(String key, int page, SimpleCallback<List<Photos>> callback) {
 
-        apiService.getPhotos(key,page).flatMap(new Func1<BaseResponse<Photos>, Observable<List<Photos>>>() {
+        apiService.getPhotos(key, page).flatMap(new Func1<BaseResponse<Photos>, Observable<List<Photos>>>() {
             @Override
             public Observable<List<Photos>> call(BaseResponse<Photos> photos) {
                 if (photos.getCode() != 200) {
@@ -73,19 +73,19 @@ public class APIManager {
     }
 
 
-    public Subscription getLines(SimpleCallback<Lines> callback){
-       return apiService.getLines(Constant.APIKEY,"json").subscribeOn(Schedulers.io())
+    public Subscription getLines(SimpleCallback<Lines> callback) {
+        return apiService.getLines(Constant.APIKEY, "json").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ExceptionSubscriber<Lines>(callback,application));
+                .subscribe(new ExceptionSubscriber<Lines>(callback, application));
     }
 
-    public Call<Lines> getWords(final   SimpleCallback<Lines> callback){
-       Call<Lines> call = apiService.getWords(Constant.APIKEY,"json");
+    public Call<Lines> getWords(final SimpleCallback<Lines> callback) {
+        Call<Lines> call = apiService.getWords(Constant.APIKEY, "json");
 
         call.enqueue(new Callback<Lines>() {
             @Override
             public void onResponse(Call<Lines> call, Response<Lines> response) {
-                Log.e("result",response.body().getTaici());
+                Log.e("result", response.body().getTaici());
                 callback.onNext(response.body());
 
             }
@@ -95,36 +95,37 @@ public class APIManager {
 
             }
         });
-        return  call;
+        return call;
     }
 
-    public Subscription getJokers(final PreferencesManager mPreferencesManager, SimpleCallback<List<Joker>> callback){
-        return apiService.getJokersYY(Constant.APIKEY,mPreferencesManager.getCurJokerIndex()+"")
-               .flatMap(new Func1<JsonObject, Observable<List<Joker>>>() {
-                   @Override
-                   public Observable<List<Joker>> call(JsonObject json) {
+    public Subscription getJokers(final PreferencesManager mPreferencesManager, SimpleCallback<List<Joker>> callback) {
+        return apiService.getJokersYY(Constant.APIKEY, mPreferencesManager.getCurJokerIndex() + "")
+                .flatMap(new Func1<JsonObject, Observable<List<Joker>>>() {
+                    @Override
+                    public Observable<List<Joker>> call(JsonObject json) {
 
-                       if(json!=null&&json.get("showapi_res_code").getAsString().equals("0")){
+                        if (json != null && json.get("showapi_res_code").getAsString().equals("0")) {
 
-                           mPreferencesManager.saveJokerIndex(mPreferencesManager.getCurJokerIndex()+1,json.getAsJsonObject("showapi_res_body").get("allPages").getAsInt());
+                            mPreferencesManager.saveJokerIndex(mPreferencesManager.getCurJokerIndex() + 1, json.getAsJsonObject("showapi_res_body").get("allPages").getAsInt());
 
-                           JsonArray jokerArray = json.getAsJsonObject("showapi_res_body").getAsJsonArray("contentlist");
+                            JsonArray jokerArray = json.getAsJsonObject("showapi_res_body").getAsJsonArray("contentlist");
 
-                           if(jokerArray!=null){
-                               Gson gson = new Gson();
-                               List<Joker> list =    gson.fromJson(jokerArray.toString(),new TypeToken<List<Joker>>(){}.getType());
-                           return Observable.just(list);
+                            if (jokerArray != null) {
+                                Gson gson = new Gson();
+                                List<Joker> list = gson.fromJson(jokerArray.toString(), new TypeToken<List<Joker>>() {
+                                }.getType());
+                                return Observable.just(list);
 
-                           }else{
-                               return Observable.error(new Throwable("未获取到数据"));
-                           }
+                            } else {
+                                return Observable.error(new Throwable("未获取到数据"));
+                            }
 
-                       }
-                       return Observable.error(new Throwable(json==null?"未获取到数据":json.get("showapi_res_error").toString()));
-                   }
-               })
+                        }
+                        return Observable.error(new Throwable(json == null ? "未获取到数据" : json.get("showapi_res_error").toString()));
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ExceptionSubscriber<List<Joker>>(callback,application));
+                .subscribe(new ExceptionSubscriber<List<Joker>>(callback, application));
     }
 }

@@ -71,9 +71,26 @@ public class JokerFragment extends Fragment implements JokerContract.View{
             public void onRefresh() {
 
                 mActionsListener.getJokers();
+
             }
         });
-
+        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                   int totalItemCount = linearLayoutManager.getItemCount();
+                   int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                    if ( totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+//
+//                        if (onLoadMoreListener != null) {
+//                            onLoadMoreListener.onLoadMore();
+//                        }
+//                    }
+                }
+            });
+        }
         return view;
     }
 

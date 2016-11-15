@@ -2,6 +2,9 @@ package com.sh.lynn.hz.lehe.base;
 
 import android.app.Application;
 
+import com.sh.lynn.hz.lehe.LeHeApp;
+import com.sh.lynn.hz.lehe.module.joker.DaoSession;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -32,5 +35,9 @@ public class AppModule {
     public PreferencesManager provideSharedPreferences(){
         return  new PreferencesManager(application);
     }
-
+    @Provides
+    @Singleton
+    public DaoSession provideDaoSession(){
+        return  ((LeHeApp)application).getDaoSession();
+    }
 }

@@ -10,6 +10,7 @@ import dagger.Provides;
 public class JokerModule {
     private final JokerContract.View mView;
 
+
     public JokerModule(JokerContract.View view) {
         mView = view;
     }
@@ -18,4 +19,6 @@ public class JokerModule {
     JokerContract.View provideTasksContractView() {
         return mView;
     }
+
+
 }

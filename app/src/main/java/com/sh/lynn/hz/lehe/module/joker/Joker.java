@@ -1,8 +1,13 @@
 package com.sh.lynn.hz.lehe.module.joker;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by hyz84 on 16/9/8.
  */
+@Entity
 public class Joker {
 
     /**
@@ -12,10 +17,28 @@ public class Joker {
      * type : 1
      */
 
+
+    @Id
     private String ct;
     private String text;
     private String title;
     private int type;
+
+
+
+    @Generated(hash = 1954623340)
+    public Joker(String ct, String text, String title, int type) {
+        this.ct = ct;
+        this.text = text;
+        this.title = title;
+        this.type = type;
+    }
+
+    @Generated(hash = 1456579416)
+    public Joker() {
+    }
+
+
 
     public String getCt() {
         return ct;
@@ -48,4 +71,6 @@ public class Joker {
     public void setType(int type) {
         this.type = type;
     }
+
+  
 }

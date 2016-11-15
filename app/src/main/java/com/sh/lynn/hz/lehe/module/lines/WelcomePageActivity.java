@@ -12,6 +12,9 @@ import com.sh.lynn.hz.lehe.net.APIManager;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 //import butterknife.BindView;
 //import butterknife.ButterKnife;
 
@@ -29,7 +32,7 @@ public class WelcomePageActivity extends Activity implements WelcPageView {
     @Inject
     APIManager mAPIManager;
 
-//    @BindView(R.id.tv_welcomeWord)
+   @BindView(R.id.tv_welcomeWord)
     TextView tv_text;
 
 
@@ -39,8 +42,8 @@ public class WelcomePageActivity extends Activity implements WelcPageView {
 
         setContentView(R.layout.activity_welcome_page);
 
-//        ButterKnife.bind(this);
-        tv_text = (TextView) this.findViewById(R.id.tv_welcomeWord);
+      ButterKnife.bind(this);
+        //tv_text = (TextView) this.findViewById(R.id.tv_welcomeWord);
         LeHeApp.get(this).getAppComponent().plus(new WelcPageModule(this)).inject(this);
 
     }

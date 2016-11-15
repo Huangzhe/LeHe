@@ -32,7 +32,6 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-       // holder.mTextView.setText(mValues.get(position).getText());
         holder.mTextView.setText(Html.fromHtml(mValues.get(position).getText()));
 
     }
