@@ -33,7 +33,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mTextView.setText(Html.fromHtml(mValues.get(position).getText()));
-
+        holder.tv_title.setText(mValues.get(position).getTitle());
     }
 
     @Override
@@ -44,6 +44,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mTextView;
+        public final TextView tv_title;
 
         public Joker mItem;
 
@@ -51,7 +52,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
             super(view);
             mView = view;
             mTextView = (TextView) view.findViewById(R.id.tv_joker);
-
+            tv_title =(TextView) view.findViewById(R.id.tv_title);
         }
 
         @Override

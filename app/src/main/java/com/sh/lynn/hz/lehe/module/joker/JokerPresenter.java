@@ -4,16 +4,9 @@ import com.sh.lynn.hz.lehe.base.PreferencesManager;
 import com.sh.lynn.hz.lehe.net.APIManager;
 import com.sh.lynn.hz.lehe.net.SimpleCallback;
 
-import org.greenrobot.greendao.rx.RxDao;
-import org.greenrobot.greendao.rx.RxQuery;
-
 import java.util.List;
 
 import javax.inject.Inject;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by hyz84 on 16/11/11.
@@ -24,18 +17,18 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
     private APIManager mAPIManager;
     private JokerContract.View mView;
     PreferencesManager mPreferencesManager;
-    DaoSession mDaoSession;
-    private RxDao<Joker, String> jokerDao;
-    private RxQuery<Joker> jokerQuery;
+//    DaoSession mDaoSession;
+//    private RxDao<Joker, String> jokerDao;
+//    private RxQuery<Joker> jokerQuery;
 
     @Inject
-    JokerPresenter(APIManager apiManager, JokerContract.View view, PreferencesManager preferencesManager, DaoSession daoSession) {
+    JokerPresenter(APIManager apiManager, JokerContract.View view, PreferencesManager preferencesManager) {
         mAPIManager = apiManager;
         mView = view;
         mPreferencesManager = preferencesManager;
-        mDaoSession = daoSession;
-        jokerDao = mDaoSession.getJokerDao().rx();
-        jokerQuery = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct).rx();
+//        mDaoSession = daoSession;
+//        jokerDao = mDaoSession.getJokerDao().rx();
+//        jokerQuery = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct).rx();
     }
 
     @Override
@@ -43,10 +36,13 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
         int index = mPreferencesManager.getCurJokerIndex();
         int total = mPreferencesManager.getJokerTotal();
         if (index > total) {
-            loadMoreJokers(index - 20 > 0 ? index - 20 : 0);
+            //loadMoreJokers(index - 20 > 0 ? index - 20 : 0);
+          //  Toast.makeText(mView,"你已经看完了所有笑话，请过会儿再看~",Toast.LENGTH_LONG).show();
+
+            mView. showEnd("没有更多了，请过会儿再来看~");
             return;
         }
-        mAPIManager.getJokers(mPreferencesManager, new SimpleCallback<List<Joker>>() {
+        mAPIManager.getJokersYY(mPreferencesManager, new SimpleCallback<List<Joker>>() {
             @Override
             public void onStart() {
 
@@ -55,7 +51,7 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
             @Override
             public void onNext(List<Joker> jokers) {
                 mView.showJokerList(jokers);
-                jokerDao.insertOrReplaceInTx(jokers);
+                //jokerDao.insertOrReplaceInTx(jokers);
             }
 
             @Override
@@ -67,12 +63,14 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
 
     @Override
     public void loadMoreJokers(final int start) {
-        jokerQuery.list().subscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<Joker>>() {
-
-            @Override
-            public void call(List<Joker> jokers) {
-                mView.showJokerList(jokers.subList(start, start + 20));
-            }
-        });
+//        jokerQuery.list()
+//                .subscribeOn(Schedulers.io())
+//                .subscribeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<List<Joker>>() {
+//                    @Override
+//                    public void call(List<Joker> jokers) {
+//                        mView.showJokerList(jokers.subList(start, start + 20));
+//                    }
+//                });
     }
 }

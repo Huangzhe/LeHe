@@ -22,10 +22,13 @@ public interface ApiService {
     @GET("txapi/naowan/naowan")
     Observable<BrainSharp> getBrainSharp(@Header("apikey") String apikey);
 
-    //笑话 易源
+    //笑话 百度
     @GET("showapi_open_bus/showapi_joke/joke_text")
     Observable<JsonObject> getJokersYY(@Header("apikey") String apikey, @Query("page") String page);
 
+    //笑话 易源
+    @GET("http://route.showapi.com/341-1/")
+    Observable<JsonObject> getJokers(@Query("showapi_appid") String appid, @Query("showapi_sign") String appsecret,@Query("page") String page,@Query("maxResult") String num);
     //http://api.tianapi.com/meinv/?key=870400af7aa7368475528367c434c959&num=10
 
     //笑话 @Query("rand") int rand, @Query("word") String word,@Query("page") int page

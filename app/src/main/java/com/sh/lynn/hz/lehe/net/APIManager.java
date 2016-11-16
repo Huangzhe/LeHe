@@ -128,4 +128,35 @@ public class APIManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ExceptionSubscriber<List<Joker>>(callback, application));
     }
+
+    public Subscription getJokersYY(final PreferencesManager mPreferencesManager, SimpleCallback<List<Joker>> callback) {
+        return apiService.getJokers(Constant.SHOWAPI_APPID,Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJokerIndex() + "","10")
+                .flatMap(new Func1<JsonObject, Observable<List<Joker>>>() {
+                    @Override
+                    public Observable<List<Joker>> call(JsonObject json) {
+
+                        if (json != null && json.get("showapi_res_code").getAsString().equals("0")) {
+
+                            mPreferencesManager.saveJokerIndex(mPreferencesManager.getCurJokerIndex() + 1, json.getAsJsonObject("showapi_res_body").get("allPages").getAsInt());
+
+                            JsonArray jokerArray = json.getAsJsonObject("showapi_res_body").getAsJsonArray("contentlist");
+
+                            if (jokerArray != null) {
+                                Gson gson = new Gson();
+                                List<Joker> list = gson.fromJson(jokerArray.toString(), new TypeToken<List<Joker>>() {
+                                }.getType());
+                                return Observable.just(list);
+
+                            } else {
+                                return Observable.error(new Throwable("未获取到数据"));
+                            }
+
+                        }
+                        return Observable.error(new Throwable(json == null ? "未获取到数据" : json.get("showapi_res_error").toString()));
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ExceptionSubscriber<List<Joker>>(callback, application));
+    }
 }

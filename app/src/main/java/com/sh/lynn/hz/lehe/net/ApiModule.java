@@ -33,8 +33,8 @@ public class ApiModule {
             builder.addInterceptor(logging);
         }
 
-        builder.connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)
-                .readTimeout(60 * 1000, TimeUnit.MILLISECONDS);
+        builder.connectTimeout(30 * 1000, TimeUnit.MILLISECONDS)
+                .readTimeout(30 * 1000, TimeUnit.MILLISECONDS);
 
 
 

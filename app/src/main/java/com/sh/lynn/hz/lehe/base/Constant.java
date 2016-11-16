@@ -11,4 +11,8 @@ public class Constant {
     public static final String JOKER_TOTAL="SP_JokerTotal";
 
     public static final String SP_NAME="SP_LeHe";
+
+    public static final String SHOWAPI_APPID = "27308";
+
+    public static final String SHOWAPI_SIGN = "04a1557ed8104af69d1a5f4c05bcf5aa";
 }
