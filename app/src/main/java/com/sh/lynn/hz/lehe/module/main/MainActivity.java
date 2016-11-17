@@ -16,6 +16,7 @@ import com.sh.lynn.hz.lehe.R;
 import com.sh.lynn.hz.lehe.adapter.BaseFragmentPagerAdapter;
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharpFragment;
 import com.sh.lynn.hz.lehe.module.joker.JokerFragment;
+import com.sh.lynn.hz.lehe.module.joyimage.JoyImageFragment;
 import com.sh.lynn.hz.lehe.module.photos.PhotosFragment;
 
 
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mBaseFragmentPagerAdapter = new BaseFragmentPagerAdapter.Holder(getSupportFragmentManager()).add(BrainSharpFragment.newInstance(1)).add(PhotosFragment.newInstance(1)).add(new JokerFragment()).build(new String[]{"脑筋急转弯","美女图片","笑话"});
+        mBaseFragmentPagerAdapter = new BaseFragmentPagerAdapter.Holder(getSupportFragmentManager()).add(BrainSharpFragment.newInstance(1)).add(PhotosFragment.newInstance(1)).add(new JokerFragment()).add(JoyImageFragment.newInstance(1)).build(new String[]{"脑筋急转弯","美女图片","笑话","笑图"});
 
         mViewPager.setAdapter(mBaseFragmentPagerAdapter);
 

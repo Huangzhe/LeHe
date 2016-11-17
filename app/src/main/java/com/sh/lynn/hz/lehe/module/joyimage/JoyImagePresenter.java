@@ -1,4 +1,4 @@
-package com.sh.lynn.hz.lehe.module.joker;
+package com.sh.lynn.hz.lehe.module.joyimage;
 
 import com.sh.lynn.hz.lehe.base.PreferencesManager;
 import com.sh.lynn.hz.lehe.net.APIManager;
@@ -12,17 +12,17 @@ import javax.inject.Inject;
  * Created by hyz84 on 16/11/11.
  */
 
-public class JokerPresenter implements JokerContract.UserActionsListener {
+public class JoyImagePresenter implements JoyImageContract.UserActionsListener {
 
     private APIManager mAPIManager;
-    private JokerContract.View mView;
+    private JoyImageContract.View mView;
     PreferencesManager mPreferencesManager;
 //    DaoSession mDaoSession;
 //    private RxDao<Joker, String> jokerDao;
 //    private RxQuery<Joker> jokerQuery;
 
     @Inject
-    JokerPresenter(APIManager apiManager, JokerContract.View view, PreferencesManager preferencesManager) {
+    JoyImagePresenter(APIManager apiManager, JoyImageContract.View view, PreferencesManager preferencesManager) {
         mAPIManager = apiManager;
         mView = view;
         mPreferencesManager = preferencesManager;
@@ -32,9 +32,9 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
     }
 
     @Override
-    public void getJokers() {
-        int index = mPreferencesManager.getCurJokerIndex();
-        int total = mPreferencesManager.getJokerTotal();
+    public void getJoyImages() {
+        int index = mPreferencesManager.getCurJoyGIFIndex();
+        int total = mPreferencesManager.getJoyGIFTotal();
         if (index > total) {
             //loadMoreJokers(index - 20 > 0 ? index - 20 : 0);
           //  Toast.makeText(mView,"你已经看完了所有笑话，请过会儿再看~",Toast.LENGTH_LONG).show();
@@ -42,15 +42,15 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
             mView. showEnd("没有更多了，请过会儿再来看~");
             return;
         }
-        mAPIManager.getJokersYY(mPreferencesManager, new SimpleCallback<List<Joker>>() {
+        mAPIManager.getJoyGIF(mPreferencesManager, new SimpleCallback<List<JoyImage>>() {
             @Override
             public void onStart() {
 
             }
 
             @Override
-            public void onNext(List<Joker> jokers) {
-                mView.showJokerList(jokers);
+            public void onNext(List<JoyImage> joyImages) {
+                mView.showJoyImageList(joyImages);
                 //jokerDao.insertOrReplaceInTx(jokers);
             }
 
@@ -61,16 +61,5 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
         });
     }
 
-    @Override
-    public void loadMoreJokers(final int start) {
-//        jokerQuery.list()
-//                .subscribeOn(Schedulers.io())
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<List<Joker>>() {
-//                    @Override
-//                    public void call(List<Joker> jokers) {
-//                        mView.showJoyImageList(jokers.subList(start, start + 20));
-//                    }
-//                });
-    }
+
 }

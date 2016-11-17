@@ -4,6 +4,8 @@ import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharpComponent;
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharpModule;
 import com.sh.lynn.hz.lehe.module.joker.JokerComponent;
 import com.sh.lynn.hz.lehe.module.joker.JokerModule;
+import com.sh.lynn.hz.lehe.module.joyimage.JoyImageComponent;
+import com.sh.lynn.hz.lehe.module.joyimage.JoyImageModule;
 import com.sh.lynn.hz.lehe.module.lines.WelcPageComponent;
 import com.sh.lynn.hz.lehe.module.lines.WelcPageModule;
 import com.sh.lynn.hz.lehe.module.photos.PhotoModule;
@@ -24,4 +26,5 @@ public interface AppComponent {
     PhotosCompoment plus(PhotoModule module);
     WelcPageComponent plus(WelcPageModule module);
     JokerComponent plus(JokerModule module);
+    JoyImageComponent plus(JoyImageModule module);
 }

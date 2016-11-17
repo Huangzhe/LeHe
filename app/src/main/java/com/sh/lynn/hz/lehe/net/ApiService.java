@@ -30,6 +30,14 @@ public interface ApiService {
     @GET("http://route.showapi.com/341-1/")
     Observable<JsonObject> getJokers(@Query("showapi_appid") String appid, @Query("showapi_sign") String appsecret,@Query("page") String page,@Query("maxResult") String num);
     //http://api.tianapi.com/meinv/?key=870400af7aa7368475528367c434c959&num=10
+       //笑话 易源图片
+    @GET("http://route.showapi.com/341-2/")
+    Observable<JsonObject> getJoyImage(@Query("showapi_appid") String appid, @Query("showapi_sign") String appsecret,@Query("page") String page,@Query("maxResult") String num);
+
+    //笑话 易源GIF
+    @GET("http://route.showapi.com/341-3/")
+    Observable<JsonObject> getJoyGIF(@Query("showapi_appid") String appid, @Query("showapi_sign") String appsecret,@Query("page") String page,@Query("maxResult") String num);
+
 
     //笑话 @Query("rand") int rand, @Query("word") String word,@Query("page") int page
     @GET("http://api.tianapi.com/meinv/")

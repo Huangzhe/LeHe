@@ -11,6 +11,7 @@ import com.sh.lynn.hz.lehe.base.Constant;
 import com.sh.lynn.hz.lehe.base.PreferencesManager;
 import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharp;
 import com.sh.lynn.hz.lehe.module.joker.Joker;
+import com.sh.lynn.hz.lehe.module.joyimage.JoyImage;
 import com.sh.lynn.hz.lehe.module.lines.Lines;
 import com.sh.lynn.hz.lehe.module.photos.Photos;
 
@@ -158,5 +159,37 @@ public class APIManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ExceptionSubscriber<List<Joker>>(callback, application));
+    }
+
+
+    public Subscription getJoyGIF(final PreferencesManager mPreferencesManager, SimpleCallback<List<JoyImage>> callback) {
+        return apiService.getJoyGIF(Constant.SHOWAPI_APPID,Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJoyGIFIndex() + "","1")
+                .flatMap(new Func1<JsonObject, Observable<List<JoyImage>>>() {
+                    @Override
+                    public Observable<List<JoyImage>> call(JsonObject json) {
+
+                        if (json != null && json.get("showapi_res_code").getAsString().equals("0")) {
+
+                            mPreferencesManager.saveJoyGIFIndex(mPreferencesManager.getCurJoyGIFIndex() + 1, json.getAsJsonObject("showapi_res_body").get("allPages").getAsInt());
+
+                            JsonArray jokerArray = json.getAsJsonObject("showapi_res_body").getAsJsonArray("contentlist");
+
+                            if (jokerArray != null) {
+                                Gson gson = new Gson();
+                                List<JoyImage> list = gson.fromJson(jokerArray.toString(), new TypeToken<List<JoyImage>>() {
+                                }.getType());
+                                return Observable.just(list);
+
+                            } else {
+                                return Observable.error(new Throwable("未获取到数据"));
+                            }
+
+                        }
+                        return Observable.error(new Throwable(json == null ? "未获取到数据" : json.get("showapi_res_error").toString()));
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ExceptionSubscriber<List<JoyImage>>(callback, application));
     }
 }

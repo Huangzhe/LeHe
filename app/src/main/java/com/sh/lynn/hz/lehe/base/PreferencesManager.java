@@ -24,7 +24,36 @@ public class PreferencesManager {
         editor.commit();
     }
 
+    public void saveJoyImageIndex(int index,int total){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(Constant.JOY_IMAGE_INDEX,index);
+        editor.putInt(Constant.JOY_IMAGE_TOTAL,total);
+        editor.commit();
+    }
 
+    public void saveJoyGIFIndex(int index,int total){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(Constant.JOY_GIF_INDEX,index);
+        editor.putInt(Constant.JOY_GIF_TOTAL,total);
+        editor.commit();
+    }
+
+
+    public int getCurJoyImageIndex(){
+        return sharedPreferences.getInt(Constant.JOY_IMAGE_INDEX,1);
+    }
+
+    public int getJoyImageTotal(){
+        return sharedPreferences.getInt(Constant.JOY_IMAGE_TOTAL,200);
+    }
+
+    public int getCurJoyGIFIndex(){
+        return sharedPreferences.getInt(Constant.JOY_GIF_INDEX,1);
+    }
+
+    public int getJoyGIFTotal(){
+        return sharedPreferences.getInt(Constant.JOY_GIF_TOTAL,200);
+    }
 
     public int getCurJokerIndex(){
         return sharedPreferences.getInt(Constant.JOKER_INDEX,1);

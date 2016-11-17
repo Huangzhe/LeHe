@@ -1,4 +1,4 @@
-package com.sh.lynn.hz.lehe.module.joker;
+package com.sh.lynn.hz.lehe.module.joyimage;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,64 +25,60 @@ import java.util.List;
  * Activities containing this fragment MUST implement the
  * interface.
  */
-public class JokerFragment extends Fragment implements JokerContract.View {
+public class JoyImageFragment extends Fragment implements  JoyImageContract.View{
 
+    private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-
-    private int index = 0;
-
-    private JokerContract.UserActionsListener mActionsListener;
-    RecyclerView recyclerView = null;
-    //    SwipeRefreshLayout swipeRefreshLayout = null;
-    List<Joker> mJokerList = new ArrayList<>();
-    MyJokerRecyclerViewAdapter mJokerRecyclerViewAdapter;
+    private JoyImageContract.UserActionsListener mPresenter;
+    List<JoyImage> mJokerList = new ArrayList<>();
+    MyJoyImageRecyclerViewAdapter mJoyImageRecyclerViewAdapter;
     boolean isBottom = false;
-
+    RecyclerView recyclerView;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public JokerFragment() {
+    public JoyImageFragment() {
+    }
+    public static JoyImageFragment newInstance(int columnCount) {
+        JoyImageFragment fragment = new JoyImageFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getArguments() != null) {
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_joker_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_joyimage_list, container, false);
 
-        mActionsListener = LeHeApp.get(getActivity()).getAppComponent().plus(new JokerModule(this)).getJokerPresenter();
-
-        Context context = view.getContext();
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        // Set the adapter
+        if (view instanceof RecyclerView) {
+            Context context = view.getContext();
+             recyclerView = (RecyclerView) view;
+            if (mColumnCount <= 1) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            } else {
+                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+            }
+          //  recyclerView.setAdapter(new MyJoyImageRecyclerViewAdapter(, mListener));
         }
 
-        mActionsListener.getJokers();
-//        swipeRefreshLayout =
-//                (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
-//        swipeRefreshLayout.setColorSchemeColors(
-//                ContextCompat.getColor(getActivity(), R.color.colorPrimary),
-//                ContextCompat.getColor(getActivity(), R.color.colorAccent),
-//                ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//
-//                mActionsListener.getJoyImages();
-//
-//            }
-//        });
-        mJokerRecyclerViewAdapter = new MyJokerRecyclerViewAdapter(mJokerList);
-        recyclerView.setAdapter(mJokerRecyclerViewAdapter);
+        mPresenter = LeHeApp.get(getActivity()).getAppComponent().plus(new JoyImageModule(this)).getJoyImaagePresenter();
+
+
+        mJoyImageRecyclerViewAdapter = new MyJoyImageRecyclerViewAdapter(mJokerList);
+        recyclerView.setAdapter(mJoyImageRecyclerViewAdapter);
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -99,10 +95,10 @@ public class JokerFragment extends Fragment implements JokerContract.View {
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mActionsListener.getJokers();
+                                        mPresenter.getJoyImages();
                                     }
                                 },2000);
-                               }
+                            }
                             break;
                         case RecyclerView.SCROLL_STATE_DRAGGING:
                             // Log.i("Alex2", "开始拖了,现在margin是" + (mFooterView == null ? "" : mFooterView.getBottomMargin()));
@@ -122,10 +118,10 @@ public class JokerFragment extends Fragment implements JokerContract.View {
                     int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
                     if (totalItemCount == (lastVisibleItem + 1)) {
-                       // Toast.makeText(getActivity().getApplicationContext(), "马上加载更多，请稍后！", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getActivity().getApplicationContext(), "马上加载更多，请稍后！", Toast.LENGTH_SHORT).show();
                         Log.e("recyclerView", "totalItemCount: " + totalItemCount + "  lastVisibleItem: " + lastVisibleItem);
                         isBottom = true;
-                       //mActionsListener.getJoyImages();
+                        //mActionsListener.getJoyImages();
 
 
                     } else {
@@ -134,6 +130,7 @@ public class JokerFragment extends Fragment implements JokerContract.View {
                 }
             });
         }
+        mPresenter.getJoyImages();
         return view;
     }
 
@@ -162,19 +159,13 @@ public class JokerFragment extends Fragment implements JokerContract.View {
     }
 
     @Override
-    public void showJokerList(List<Joker> list) {
+    public void showJoyImageList(List<JoyImage> list) {
         mJokerList.addAll(list);
-        mJokerRecyclerViewAdapter.notifyDataSetChanged();
+        mJoyImageRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showEnd(String text) {
         Snackbar.make(getView(), text, Snackbar.LENGTH_LONG).setAction("action",null).show();
-        //  Toast.makeText(getActivity().getApplicationContext(),"没有更多了，请过会儿再来看~",Toast.LENGTH_LONG).show();
     }
-
-//    @Override
-//    public void loadMoreJoker() {
-//        mActionsListener.loadMoreJokers(index);
-//    }
 }
