@@ -14,9 +14,10 @@
         android:textAppearance="?attr/textAppearanceListItem"/>
 
     <com.facebook.drawee.view.SimpleDraweeView
+        android:minHeight="200dp"
         android:id="@+id/iv_photo"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         fresco:placeholderImage="@mipmap/icon_hun_normal"
         />
 </LinearLayout>

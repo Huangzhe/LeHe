@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sh.lynn.hz.lehe.R;
 
@@ -47,6 +50,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 //
 //                .into(holder.iv_photo);
         Uri uri = Uri.parse(mValues.get(position).getPicUrl());
+        GenericDraweeHierarchy builder= GenericDraweeHierarchyBuilder
+                .newInstance(holder.mView.getResources())
+                .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
+                .setPlaceholderImage(R.mipmap.icon_hun_normal)
+                .build();
+        holder.iv_photo.setHierarchy(builder);
         holder.iv_photo.setImageURI(uri);
     }
 

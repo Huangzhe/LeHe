@@ -163,7 +163,7 @@ public class APIManager {
 
 
     public Subscription getJoyGIF(final PreferencesManager mPreferencesManager, SimpleCallback<List<JoyImage>> callback) {
-        return apiService.getJoyGIF(Constant.SHOWAPI_APPID,Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJoyGIFIndex() + "","1")
+        return apiService.getJoyImage(Constant.SHOWAPI_APPID,Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJoyGIFIndex() + "","5")
                 .flatMap(new Func1<JsonObject, Observable<List<JoyImage>>>() {
                     @Override
                     public Observable<List<JoyImage>> call(JsonObject json) {

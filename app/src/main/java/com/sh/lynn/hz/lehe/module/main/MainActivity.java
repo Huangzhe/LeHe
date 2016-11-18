@@ -1,5 +1,6 @@
 package com.sh.lynn.hz.lehe.module.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharpFragment;
 import com.sh.lynn.hz.lehe.module.joker.JokerFragment;
 import com.sh.lynn.hz.lehe.module.joyimage.JoyImageFragment;
 import com.sh.lynn.hz.lehe.module.photos.PhotosFragment;
+import com.umeng.socialize.UMShareAPI;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -91,6 +93,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
 
+    }
 
 }

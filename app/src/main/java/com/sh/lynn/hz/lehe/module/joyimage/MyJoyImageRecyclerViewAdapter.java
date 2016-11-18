@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sh.lynn.hz.lehe.R;
 
@@ -35,7 +33,7 @@ public class MyJoyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyJoyIma
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_joyimage, parent, false);
+                .inflate(R.layout.fragment_item_photos, parent, false);
         return new ViewHolder(view);
     }
 
@@ -45,29 +43,23 @@ public class MyJoyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyJoyIma
         holder.mIdView.setText(mValues.get(position).getTitle());
         //holder.mContentView.setText(mValues.get(position).content);
         Uri uri = Uri.parse(mValues.get(position).getImg());
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setUri(uri)
-                .setAutoPlayAnimations(true)
-
-                .build();
+//        DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                .setUri(uri)
+//                .setAutoPlayAnimations(true)
+//
+//                .build();
        GenericDraweeHierarchy builder= GenericDraweeHierarchyBuilder
                .newInstance(holder.mView.getResources())
-               .setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP)
+               .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
                .setPlaceholderImage(R.mipmap.icon_hun_normal)
                .build();
-       // builder.s
-        //builder.setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
+
         holder.mContentView.setHierarchy(builder);
-        holder.mContentView.setController(controller);
 
-      //  holder.mContentView.setImageURI(uri);
 
-//        holder.mView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        holder.mContentView.setImageURI(uri);
+
+
     }
 
     @Override
@@ -88,9 +80,5 @@ public class MyJoyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyJoyIma
             mContentView = (SimpleDraweeView) view.findViewById(R.id.iv_photo);
         }
 
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mContentView.getText() + "'";
-//        }
     }
 }
