@@ -105,7 +105,6 @@ public class JokerFragment extends Fragment implements JokerContract.View {
                                }
                             break;
                         case RecyclerView.SCROLL_STATE_DRAGGING:
-                            // Log.i("Alex2", "开始拖了,现在margin是" + (mFooterView == null ? "" : mFooterView.getBottomMargin()));
                             break;
                         case RecyclerView.SCROLL_STATE_SETTLING:
 

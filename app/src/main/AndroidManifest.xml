@@ -23,7 +23,7 @@
     <application
         android:name=".LeHeApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_app"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -64,7 +64,7 @@
         <activity
             android:name=".module.lines.WelcomePageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_welcome_page"
+
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -77,9 +77,11 @@
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="582ebc15310c9314e200085d" >
+        </meta-data>
     </application>
-    <meta-data
-        android:name="UMENG_APPKEY"
-        android:value="582ebc15310c9314e200085d" >
-    </meta-data>
+
 </manifest>
