@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.sh.lynn.hz.lehe.LeHeApp;
 import com.sh.lynn.hz.lehe.R;
+import com.sh.lynn.hz.lehe.module.view.TextDetailDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class JokerFragment extends Fragment implements JokerContract.View {
     List<Joker> mJokerList = new ArrayList<>();
     MyJokerRecyclerViewAdapter mJokerRecyclerViewAdapter;
     boolean isBottom = false;
-
+    private OnListFragmentInteractionListener mListener;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -81,7 +82,12 @@ public class JokerFragment extends Fragment implements JokerContract.View {
 //
 //            }
 //        });
-        mJokerRecyclerViewAdapter = new MyJokerRecyclerViewAdapter(mJokerList);
+        mJokerRecyclerViewAdapter = new MyJokerRecyclerViewAdapter(mJokerList, new OnListFragmentInteractionListener() {
+            @Override
+            public void onListFragmentInteraction(Joker item) {
+                showDetail(item);
+            }
+        });
         recyclerView.setAdapter(mJokerRecyclerViewAdapter);
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
@@ -172,8 +178,25 @@ public class JokerFragment extends Fragment implements JokerContract.View {
         //  Toast.makeText(getActivity().getApplicationContext(),"没有更多了，请过会儿再来看~",Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showDetail(Joker joker) {
+//        Dialog dialog = new Dialog(getActivity());
+//        dialog.setContentView();
+        Bundle bundle = new Bundle();
+        bundle.putString("title",joker.getTitle());
+        bundle.putString("text",joker.getText());
+        TextDetailDialog textDetailDialog = new TextDetailDialog();
+        textDetailDialog.setArguments(bundle);
+        textDetailDialog.show(getFragmentManager(),"textDialog");
+
+    }
+
 //    @Override
 //    public void loadMoreJoker() {
 //        mActionsListener.loadMoreJokers(index);
 //    }
+
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentInteraction(Joker item);
+    }
 }

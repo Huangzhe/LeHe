@@ -9,17 +9,16 @@ import android.widget.TextView;
 
 import com.sh.lynn.hz.lehe.R;
 
-
 import java.util.List;
 
 public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecyclerViewAdapter.ViewHolder> {
 
     private final List<Joker> mValues;
+    private JokerFragment.OnListFragmentInteractionListener mListener;
 
-
-    public MyJokerRecyclerViewAdapter(List<Joker> items) {
+    public MyJokerRecyclerViewAdapter(List<Joker> items,JokerFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
-
+        mListener=listener;
     }
 
     @Override
@@ -34,6 +33,15 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
         holder.mItem = mValues.get(position);
         holder.mTextView.setText(Html.fromHtml(mValues.get(position).getText()));
         holder.tv_title.setText(mValues.get(position).getTitle());
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    mListener.onListFragmentInteraction(holder.mItem);
+                }
+            }
+        });
     }
 
     @Override

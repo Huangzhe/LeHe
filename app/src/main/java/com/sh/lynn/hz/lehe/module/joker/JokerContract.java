@@ -12,6 +12,7 @@ public interface JokerContract {
             void closeLoading();
             void showJokerList(List<Joker> list);
             void showEnd(String text);
+            void showDetail(Joker joker);
     }
      interface UserActionsListener {
 

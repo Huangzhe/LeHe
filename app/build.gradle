@@ -39,6 +39,12 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile "com.google.guava:guava:$rootProject.guavaVersion"
+    compile files('libs/SocialSDK_umengqq.jar')
+    compile files('libs/SocialSDK_umengsina.jar')
+    compile files('libs/SocialSDK_umengwx.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/umeng_social_net.jar')
+    compile files('libs/umeng_social_view.jar')
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'io.reactivex:rxjava:1.1.3'
     compile 'io.reactivex:rxandroid:1.1.0'
@@ -64,10 +70,4 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     provided 'com.google.dagger:dagger-compiler:2.5'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-    compile files('libs/SocialSDK_umengqq.jar')
-    compile files('libs/SocialSDK_umengsina.jar')
-    compile files('libs/SocialSDK_umengwx.jar')
-    compile files('libs/umeng_social_api.jar')
-    compile files('libs/umeng_social_net.jar')
-    compile files('libs/umeng_social_view.jar')
 }
