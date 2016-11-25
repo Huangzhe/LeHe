@@ -1,8 +1,8 @@
 package com.sh.lynn.hz.lehe.module.joker;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * Created by hyz84 on 16/9/8.
@@ -19,19 +19,23 @@ public class Joker {
 
 
     @Id
+    private String id;
     private String ct;
     private String text;
     private String title;
     private int type;
 
+    private boolean readState;//true read  ,false unRead
 
 
-    @Generated(hash = 1954623340)
-    public Joker(String ct, String text, String title, int type) {
+    @Generated(hash = 1790748906)
+    public Joker(String id, String ct, String text, String title, int type, boolean readState) {
+        this.id = id;
         this.ct = ct;
         this.text = text;
         this.title = title;
         this.type = type;
+        this.readState = readState;
     }
 
     @Generated(hash = 1456579416)
@@ -70,6 +74,22 @@ public class Joker {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean getReadState() {
+        return this.readState;
+    }
+
+    public void setReadState(boolean readState) {
+        this.readState = readState;
     }
 
   

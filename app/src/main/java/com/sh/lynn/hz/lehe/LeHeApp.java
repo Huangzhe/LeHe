@@ -34,10 +34,10 @@ public class LeHeApp  extends Application{
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "LeHe-db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
-
-       // PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");
+       // helper.onUpgrade(db,1,2);
+        PlatformConfig.setWeixin("wxa2c6d123c9a0cc62", "515f10686ae25d90abf362e1865672cd");
       //  PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad");
-        PlatformConfig.setQQZone("1105761827", "2RRZIS1GwPGDjA5L");
+      //  PlatformConfig.setQQZone("1105761827", "2RRZIS1GwPGDjA5L");
 
         UMShareAPI.get(this);
     }

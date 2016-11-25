@@ -34,7 +34,6 @@ public class JokerFragment extends Fragment implements JokerContract.View {
 
     private JokerContract.UserActionsListener mActionsListener;
     RecyclerView recyclerView = null;
-    //    SwipeRefreshLayout swipeRefreshLayout = null;
     List<Joker> mJokerList = new ArrayList<>();
     MyJokerRecyclerViewAdapter mJokerRecyclerViewAdapter;
     boolean isBottom = false;
@@ -67,21 +66,8 @@ public class JokerFragment extends Fragment implements JokerContract.View {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
-        mActionsListener.getJokers();
-//        swipeRefreshLayout =
-//                (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
-//        swipeRefreshLayout.setColorSchemeColors(
-//                ContextCompat.getColor(getActivity(), R.color.colorPrimary),
-//                ContextCompat.getColor(getActivity(), R.color.colorAccent),
-//                ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//
-//                mActionsListener.getJoyImages();
-//
-//            }
-//        });
+        //mActionsListener.getJokers();
+        mActionsListener.loadMoreJokers();
         mJokerRecyclerViewAdapter = new MyJokerRecyclerViewAdapter(mJokerList, new OnListFragmentInteractionListener() {
             @Override
             public void onListFragmentInteraction(Joker item) {
@@ -105,7 +91,7 @@ public class JokerFragment extends Fragment implements JokerContract.View {
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mActionsListener.getJokers();
+                                        mActionsListener.loadMoreJokers();
                                     }
                                 },2000);
                                }
@@ -127,10 +113,8 @@ public class JokerFragment extends Fragment implements JokerContract.View {
                     int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
                     if (totalItemCount == (lastVisibleItem + 1)) {
-                       // Toast.makeText(getActivity().getApplicationContext(), "马上加载更多，请稍后！", Toast.LENGTH_SHORT).show();
                         Log.e("recyclerView", "totalItemCount: " + totalItemCount + "  lastVisibleItem: " + lastVisibleItem);
                         isBottom = true;
-                       //mActionsListener.getJoyImages();
 
 
                     } else {

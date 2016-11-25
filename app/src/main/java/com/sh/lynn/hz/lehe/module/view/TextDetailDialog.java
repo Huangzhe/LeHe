@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sh.lynn.hz.lehe.R;
+import com.sh.lynn.hz.lehe.net.CommonUtils;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -43,7 +44,7 @@ public class TextDetailDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View view = inflater.inflate(R.layout.dialog_text_detail,container);
+        View view = inflater.inflate(R.layout.dialog_text_detail,container);
 
         ButterKnife.bind(this,view);
 
@@ -59,10 +60,9 @@ public class TextDetailDialog extends DialogFragment {
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ShareAction(getActivity()).setPlatform(SHARE_MEDIA.QQ)
-                        .withText(text)
+                new ShareAction(getActivity()).setPlatform(SHARE_MEDIA.WEIXIN)
+                        .withText(CommonUtils.html2Text(text))
                         .withTitle("笑话")
-                        
                         .setCallback(umShareListener)
                         .share();
             }
@@ -93,4 +93,6 @@ public class TextDetailDialog extends DialogFragment {
             Toast.makeText(getActivity(),platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
+
+
 }

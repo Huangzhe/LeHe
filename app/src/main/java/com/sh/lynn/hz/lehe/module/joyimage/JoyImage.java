@@ -15,13 +15,16 @@ public class JoyImage {
     private String img;
     private String title;
     private int type;
-    @Generated(hash = 1323941550)
-    public JoyImage(String id, String ct, String img, String title, int type) {
+    private boolean readState;//true read  ,false unRead
+    @Generated(hash = 1456879182)
+    public JoyImage(String id, String ct, String img, String title, int type,
+            boolean readState) {
         this.id = id;
         this.ct = ct;
         this.img = img;
         this.title = title;
         this.type = type;
+        this.readState = readState;
     }
     @Generated(hash = 654327250)
     public JoyImage() {
@@ -55,5 +58,11 @@ public class JoyImage {
     }
     public void setId(String id) {
         this.id = id;
+    }
+    public boolean getReadState() {
+        return this.readState;
+    }
+    public void setReadState(boolean readState) {
+        this.readState = readState;
     }
 }

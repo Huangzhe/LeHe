@@ -1,12 +1,21 @@
 package com.sh.lynn.hz.lehe.module.joker;
 
+import android.util.Log;
+
 import com.sh.lynn.hz.lehe.base.PreferencesManager;
 import com.sh.lynn.hz.lehe.net.APIManager;
 import com.sh.lynn.hz.lehe.net.SimpleCallback;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.rx.RxDao;
+import org.greenrobot.greendao.rx.RxQuery;
+
 import java.util.List;
 
 import javax.inject.Inject;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by hyz84 on 16/11/11.
@@ -17,18 +26,19 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
     private APIManager mAPIManager;
     private JokerContract.View mView;
     PreferencesManager mPreferencesManager;
-//    DaoSession mDaoSession;
-//    private RxDao<Joker, String> jokerDao;
-//    private RxQuery<Joker> jokerQuery;
+    DaoSession mDaoSession;
+    private RxDao<Joker, String> jokerDao;
+    private RxQuery<Joker> jokerQuery;
+
 
     @Inject
-    JokerPresenter(APIManager apiManager, JokerContract.View view, PreferencesManager preferencesManager) {
+    JokerPresenter(APIManager apiManager, JokerContract.View view, PreferencesManager preferencesManager, DaoSession daoSession) {
         mAPIManager = apiManager;
         mView = view;
         mPreferencesManager = preferencesManager;
-//        mDaoSession = daoSession;
-//        jokerDao = mDaoSession.getJokerDao().rx();
-//        jokerQuery = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct).rx();
+        mDaoSession = daoSession;
+        jokerDao = mDaoSession.getJokerDao().rx();
+        // jokerQuery = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct).rx();
     }
 
     @Override
@@ -37,9 +47,9 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
         int total = mPreferencesManager.getJokerTotal();
         if (index > total) {
             //loadMoreJokers(index - 20 > 0 ? index - 20 : 0);
-          //  Toast.makeText(mView,"你已经看完了所有笑话，请过会儿再看~",Toast.LENGTH_LONG).show();
+            //  Toast.makeText(mView,"你已经看完了所有笑话，请过会儿再看~",Toast.LENGTH_LONG).show();
 
-            mView. showEnd("没有更多了，请过会儿再来看~");
+            mView.showEnd("没有更多了，请过会儿再来看~");
             return;
         }
         mAPIManager.getJokersYY(mPreferencesManager, new SimpleCallback<List<Joker>>() {
@@ -50,8 +60,18 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
 
             @Override
             public void onNext(List<Joker> jokers) {
-                mView.showJokerList(jokers);
-                //jokerDao.insertOrReplaceInTx(jokers);
+                // mView.showJokerList(jokrs);
+                for (int x = 0; x < jokers.size(); x++) {
+                    jokers.get(x).setReadState(false);
+                }
+
+                jokerDao.insertOrReplaceInTx(jokers).subscribe(new Action1<Iterable<Joker>>() {
+                    @Override
+                    public void call(Iterable<Joker> jokers) {
+                        //Joker joker =  jokers.iterator().next();
+                        Log.d("loadMoreJokers", "jokers= ");
+                    }
+                });
             }
 
             @Override
@@ -62,15 +82,65 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
     }
 
     @Override
-    public void loadMoreJokers(final int start) {
-//        jokerQuery.list()
-//                .subscribeOn(Schedulers.io())
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<List<Joker>>() {
-//                    @Override
-//                    public void call(List<Joker> jokers) {
-//                        mView.showJoyImageList(jokers.subList(start, start + 20));
-//                    }
-//                });
+    public void loadMoreJokers() {
+
+        final int index = 0;
+        QueryBuilder<Joker> queryBuilder = jokerDao.getDao().queryBuilder();
+        final long total = queryBuilder.where(JokerDao.Properties.ReadState.eq(false)).count();
+       long all = queryBuilder.count();
+        Log.d("loadMoreJokers", "all= " + all + "  total=" + total);
+        if (total > 20) {
+
+            jokerQuery = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct).where(JokerDao.Properties.ReadState.eq(false)).limit(10).rx();
+
+            jokerQuery.list()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<List<Joker>>() {
+                        @Override
+                        public void call(List<Joker> jokers) {
+                            Log.d("loadMoreJokers", "jokers= " + jokers.size());
+
+                            for (int x = 0; x < jokers.size(); x++) {
+                                jokers.get(x).setReadState(true);
+
+                            }
+                            jokerDao.updateInTx(jokers).subscribe(new Action1<Iterable<Joker>>() {
+                                @Override
+                                public void call(Iterable<Joker> jokers) {
+
+                                }
+                            });
+                            // mView.showJoyImageList(jokers.subList(start, start + 20));
+                            mView.showJokerList(jokers);
+                            //mPreferencesManager.saveJokerIndex(index + 20, serverTotal);
+                        }
+                    });
+        } else {
+            jokerQuery = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct).limit(10).offset(0).rx();
+
+            jokerQuery.list()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<List<Joker>>() {
+                        @Override
+                        public void call(List<Joker> jokers) {
+                            for (int x = 0; x < jokers.size(); x++) {
+                                jokers.get(x).setReadState(true);
+
+                            }
+                            
+                            jokerDao.updateInTx(jokers).subscribe(new Action1<Iterable<Joker>>() {
+                                @Override
+                                public void call(Iterable<Joker> jokers) {
+
+                                }
+                            });
+                            // mView.showJoyImageList(jokers.subList(start, start + 20));
+                            mView.showJokerList(jokers);
+                            //mPreferencesManager.saveJokerIndex(index + 20, serverTotal);
+                        }
+                    });
+            getJokers();
+        }
+
     }
 }

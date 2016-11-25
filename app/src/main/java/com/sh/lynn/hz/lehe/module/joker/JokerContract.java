@@ -18,7 +18,7 @@ public interface JokerContract {
 
          void getJokers();
 
-         void loadMoreJokers(int start);
+         void loadMoreJokers();
 
     }
 }
