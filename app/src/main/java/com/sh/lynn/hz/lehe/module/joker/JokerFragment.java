@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.sh.lynn.hz.lehe.LeHeApp;
 import com.sh.lynn.hz.lehe.R;
-import com.sh.lynn.hz.lehe.module.view.TextDetailDialog;
+import com.sh.lynn.hz.lehe.listener.MyUMShareListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,12 +68,7 @@ public class JokerFragment extends Fragment implements JokerContract.View {
 
         //mActionsListener.getJokers();
         mActionsListener.loadMoreJokers();
-        mJokerRecyclerViewAdapter = new MyJokerRecyclerViewAdapter(mJokerList, new OnListFragmentInteractionListener() {
-            @Override
-            public void onListFragmentInteraction(Joker item) {
-                showDetail(item);
-            }
-        });
+        mJokerRecyclerViewAdapter = new MyJokerRecyclerViewAdapter(mJokerList, new MyUMShareListener(getActivity().getApplicationContext()));
         recyclerView.setAdapter(mJokerRecyclerViewAdapter);
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
@@ -152,8 +147,11 @@ public class JokerFragment extends Fragment implements JokerContract.View {
 
     @Override
     public void showJokerList(List<Joker> list) {
+
         mJokerList.addAll(list);
+
         mJokerRecyclerViewAdapter.notifyDataSetChanged();
+        Log.d("showJokerList","list size="+list.size()+" allSize="+mJokerList.size());
     }
 
     @Override
@@ -166,12 +164,12 @@ public class JokerFragment extends Fragment implements JokerContract.View {
     public void showDetail(Joker joker) {
 //        Dialog dialog = new Dialog(getActivity());
 //        dialog.setContentView();
-        Bundle bundle = new Bundle();
-        bundle.putString("title",joker.getTitle());
-        bundle.putString("text",joker.getText());
-        TextDetailDialog textDetailDialog = new TextDetailDialog();
-        textDetailDialog.setArguments(bundle);
-        textDetailDialog.show(getFragmentManager(),"textDialog");
+//        Bundle bundle = new Bundle();
+//        bundle.putString("title",joker.getTitle());
+//        bundle.putString("text",joker.getText());
+//        TextDetailDialog textDetailDialog = new TextDetailDialog();
+//        textDetailDialog.setArguments(bundle);
+//        textDetailDialog.show(getFragmentManager(),"textDialog");
 
     }
 

@@ -55,7 +55,7 @@ public class TextDetailDialog extends DialogFragment {
         final   String text = bundle.getString("text");
 
         tv_title.setText(title);
-        tv_text.setText(Html.fromHtml(text));
+        tv_text.setText("\t\t\t\t"+Html.fromHtml(text));
 
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override

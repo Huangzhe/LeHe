@@ -62,7 +62,7 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
             public void onNext(List<Joker> jokers) {
                 // mView.showJokerList(jokrs);
                 for (int x = 0; x < jokers.size(); x++) {
-                    jokers.get(x).setReadState(false);
+                    jokers.get(x).setReadState(0);
                 }
 
                 jokerDao.insertOrReplaceInTx(jokers).subscribe(new Action1<Iterable<Joker>>() {
@@ -72,6 +72,13 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
                         Log.d("loadMoreJokers", "jokers= ");
                     }
                 });
+                QueryBuilder<Joker> queryBuilder = jokerDao.getDao().queryBuilder();
+                long total = queryBuilder.where(JokerDao.Properties.ReadState.eq(0)).count();
+                //如果没有未读的，直接显示出来
+                if (total == 0) {
+                    mView.showJokerList(jokers);
+                    changJokerStatue(jokers);
+                }
             }
 
             @Override
@@ -86,12 +93,12 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
 
         final int index = 0;
         QueryBuilder<Joker> queryBuilder = jokerDao.getDao().queryBuilder();
-        final long total = queryBuilder.where(JokerDao.Properties.ReadState.eq(false)).count();
-       long all = queryBuilder.count();
+        final long total = queryBuilder.where(JokerDao.Properties.ReadState.eq(0)).count();
+        long all = queryBuilder.count();
         Log.d("loadMoreJokers", "all= " + all + "  total=" + total);
         if (total > 20) {
 
-            jokerQuery = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct).where(JokerDao.Properties.ReadState.eq(false)).limit(10).rx();
+            jokerQuery = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct).where(JokerDao.Properties.ReadState.eq(0)).limit(10).rx();
 
             jokerQuery.list()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -100,18 +107,10 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
                         public void call(List<Joker> jokers) {
                             Log.d("loadMoreJokers", "jokers= " + jokers.size());
 
-                            for (int x = 0; x < jokers.size(); x++) {
-                                jokers.get(x).setReadState(true);
 
-                            }
-                            jokerDao.updateInTx(jokers).subscribe(new Action1<Iterable<Joker>>() {
-                                @Override
-                                public void call(Iterable<Joker> jokers) {
-
-                                }
-                            });
                             // mView.showJoyImageList(jokers.subList(start, start + 20));
                             mView.showJokerList(jokers);
+                            changJokerStatue(jokers);
                             //mPreferencesManager.saveJokerIndex(index + 20, serverTotal);
                         }
                     });
@@ -123,24 +122,32 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
                     .subscribe(new Action1<List<Joker>>() {
                         @Override
                         public void call(List<Joker> jokers) {
-                            for (int x = 0; x < jokers.size(); x++) {
-                                jokers.get(x).setReadState(true);
 
-                            }
-                            
-                            jokerDao.updateInTx(jokers).subscribe(new Action1<Iterable<Joker>>() {
-                                @Override
-                                public void call(Iterable<Joker> jokers) {
-
-                                }
-                            });
                             // mView.showJoyImageList(jokers.subList(start, start + 20));
                             mView.showJokerList(jokers);
+                            changJokerStatue(jokers);
                             //mPreferencesManager.saveJokerIndex(index + 20, serverTotal);
                         }
                     });
             getJokers();
         }
-
     }
+
+    /**
+     * 更改阅读状态
+     * @param jokers
+     */
+    private void changJokerStatue(List<Joker> jokers) {
+        for (int x = 0; x < jokers.size(); x++) {
+            jokers.get(x).setReadState(1);
+        }
+        jokerDao.updateInTx(jokers).subscribe(new Action1<Iterable<Joker>>() {
+            @Override
+            public void call(Iterable<Joker> jokers) {
+
+            }
+        });
+    }
+
 }
+
