@@ -1,6 +1,7 @@
 package com.sh.lynn.hz.lehe.module.joker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -16,8 +17,10 @@ import android.view.ViewGroup;
 import com.sh.lynn.hz.lehe.LeHeApp;
 import com.sh.lynn.hz.lehe.R;
 import com.sh.lynn.hz.lehe.listener.MyUMShareListener;
+import com.sh.lynn.hz.lehe.listener.OnImageClickListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,7 +71,20 @@ public class JokerFragment extends Fragment implements JokerContract.View {
 
         //mActionsListener.getJokers();
         mActionsListener.loadMoreJokers();
-        mJokerRecyclerViewAdapter = new MyJokerRecyclerViewAdapter(mJokerList, new MyUMShareListener(getActivity().getApplicationContext()));
+        mJokerRecyclerViewAdapter = new MyJokerRecyclerViewAdapter(mJokerList, new MyUMShareListener(getActivity().getApplicationContext()),new OnImageClickListener() {
+            @Override
+            public void onImageInteraction(Object item) {
+                //  mPresenter.downLoadImage(item.getImg());
+
+                if(item instanceof Joker){
+
+                    Intent intent = new Intent(getActivity(),ImageActivity.class);
+                    intent.putExtra("ImageUrl",((Joker)item).getText());
+                    intent.putExtra("ImageType",((Joker)item).getType());
+                    startActivity(intent);
+                }
+            }
+        });
         recyclerView.setAdapter(mJokerRecyclerViewAdapter);
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
@@ -82,6 +98,7 @@ public class JokerFragment extends Fragment implements JokerContract.View {
 
                             if (isBottom){
                                 showEnd("马上加载更多，请稍后！");
+                                isBottom = false;
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -147,9 +164,11 @@ public class JokerFragment extends Fragment implements JokerContract.View {
 
     @Override
     public void showJokerList(List<Joker> list) {
-
+        Collections.shuffle(list);
         mJokerList.addAll(list);
-
+//        for(int x=0;x<list.size();x++){
+//            Log.d("showJokerList",list.get(x).getTitle()+" type="+list.get(x).getType()+"  text="+list.get(x).getText());
+//        }
         mJokerRecyclerViewAdapter.notifyDataSetChanged();
         Log.d("showJokerList","list size="+list.size()+" allSize="+mJokerList.size());
     }

@@ -21,6 +21,7 @@ public interface JoyImageContract {
 
         void getJoyImages();
 
+        void downLoadImage(String path);
 
     }
 }

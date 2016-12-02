@@ -1,6 +1,5 @@
 package com.sh.lynn.hz.lehe.module.photos;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sh.lynn.hz.lehe.R;
+import com.sh.lynn.hz.lehe.listener.OnImageClickListener;
 
 import java.util.List;
 
@@ -22,11 +22,11 @@ import java.util.List;
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<Photos> mValues;
-    Context mCtx;
+    private OnImageClickListener mListener;
 
-    public MyItemRecyclerViewAdapter(List<Photos> items, Context ctx) {
+    public MyItemRecyclerViewAdapter(List<Photos> items, OnImageClickListener listener) {
         mValues = items;
-        mCtx = ctx;
+        mListener = listener;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
         holder.tv_title.setText(mValues.get(position).getTitle());
         //  holder.mContentView.setText(mValues.get(position).content);
@@ -57,6 +57,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 .build();
         holder.iv_photo.setHierarchy(builder);
         holder.iv_photo.setImageURI(uri);
+
+        holder.iv_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onImageInteraction(mValues.get(position));
+
+            }
+        });
     }
 
     @Override

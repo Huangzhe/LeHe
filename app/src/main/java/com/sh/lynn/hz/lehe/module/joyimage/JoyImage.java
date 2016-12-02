@@ -1,8 +1,8 @@
 package com.sh.lynn.hz.lehe.module.joyimage;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * Created by hyz84 on 16/11/17.
@@ -14,10 +14,12 @@ public class JoyImage {
     private String ct;
     private String img;
     private String title;
-    private int type;
+    private String type;
     private boolean readState;//true read  ,false unRead
-    @Generated(hash = 1456879182)
-    public JoyImage(String id, String ct, String img, String title, int type,
+
+
+    @Generated(hash = 278686530)
+    public JoyImage(String id, String ct, String img, String title, String type,
             boolean readState) {
         this.id = id;
         this.ct = ct;
@@ -29,6 +31,8 @@ public class JoyImage {
     @Generated(hash = 654327250)
     public JoyImage() {
     }
+
+
     public String getCt() {
         return this.ct;
     }
@@ -47,10 +51,10 @@ public class JoyImage {
     public void setTitle(String title) {
         this.title = title;
     }
-    public int getType() {
+    public String getType() {
         return this.type;
     }
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
     public String getId() {

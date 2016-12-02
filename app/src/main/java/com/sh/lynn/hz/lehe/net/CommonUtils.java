@@ -1,12 +1,24 @@
 package com.sh.lynn.hz.lehe.net;
 
+import android.os.Environment;
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.regex.Pattern;
+
+import okhttp3.ResponseBody;
 
 /**
  * Created by hyz84 on 16/11/23.
  */
 
 public class CommonUtils {
+
+    private final static String TAG = "CommonUtils";
 
     public static String html2Text(String inputString) {
         String htmlStr = inputString; // 含html标签的字符串
@@ -43,5 +55,59 @@ public class CommonUtils {
         }
 
         return textStr;
+    }
+
+
+    public static String writeResponseBodyToDisk(String fileName,ResponseBody body) {
+        try {
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+            File dir = new File(path + File.separator +"/LeHe/img/");
+
+            if(!dir.exists())
+                dir.mkdirs();
+            File file = new File(path + File.separator +"/LeHe/img/",fileName+".jpg");
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+                Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(file);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+
+                }
+
+                outputStream.flush();
+
+                return file.getAbsolutePath();
+            } catch (IOException e) {
+                return "";
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return "";
+        }
     }
 }

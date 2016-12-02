@@ -5,10 +5,13 @@ import com.sh.lynn.hz.lehe.module.brainSharp.BrainSharp;
 import com.sh.lynn.hz.lehe.module.lines.Lines;
 import com.sh.lynn.hz.lehe.module.photos.Photos;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -50,4 +53,8 @@ public interface ApiService {
 
     @GET("acman/zhaiyanapi/tcrand")
     Call<Lines> getWords(@Header("apikey") String apikey, @Query("fangfa") String fangfa);
+
+    @GET
+    @Headers({"Content-Type: application/octet-stream"})
+    Observable<ResponseBody> downLoadImg(@Url String url);
 }

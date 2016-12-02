@@ -29,7 +29,7 @@ public class LeHeApp  extends Application{
         super.onCreate();
         appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         Fresco.initialize(this);
-
+        
         //greenDao
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "LeHe-db");
         Database db = helper.getWritableDb();

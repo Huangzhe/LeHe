@@ -1,6 +1,7 @@
 package com.sh.lynn.hz.lehe.module.joyimage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.sh.lynn.hz.lehe.LeHeApp;
 import com.sh.lynn.hz.lehe.R;
+import com.sh.lynn.hz.lehe.listener.OnImageClickListener;
+import com.sh.lynn.hz.lehe.module.joker.ImageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +61,10 @@ public class JoyImageFragment extends Fragment implements  JoyImageContract.View
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_joyimage_list, container, false);
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
              recyclerView = (RecyclerView) view;
@@ -77,7 +79,18 @@ public class JoyImageFragment extends Fragment implements  JoyImageContract.View
         mPresenter = LeHeApp.get(getActivity()).getAppComponent().plus(new JoyImageModule(this)).getJoyImaagePresenter();
 
 
-        mJoyImageRecyclerViewAdapter = new MyJoyImageRecyclerViewAdapter(mJokerList);
+        mJoyImageRecyclerViewAdapter = new MyJoyImageRecyclerViewAdapter(mJokerList, new OnImageClickListener() {
+            @Override
+            public void onImageInteraction(Object item) {
+              //  mPresenter.downLoadImage(item.getImg());
+
+                if(item instanceof  JoyImage){
+
+                Intent intent = new Intent(getActivity(),ImageActivity.class);
+                intent.putExtra("ImageUrl",((JoyImage)item).getImg());
+                startActivity(intent);}
+            }
+        });
         recyclerView.setAdapter(mJoyImageRecyclerViewAdapter);
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
@@ -168,4 +181,6 @@ public class JoyImageFragment extends Fragment implements  JoyImageContract.View
     public void showEnd(String text) {
         Snackbar.make(getView(), text, Snackbar.LENGTH_LONG).setAction("action",null).show();
     }
+
+
 }

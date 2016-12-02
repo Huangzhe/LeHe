@@ -1,8 +1,16 @@
 package com.sh.lynn.hz.lehe.module.joker;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+
+import java.lang.reflect.Type;
 
 /**
  * Created by hyz84 on 16/9/8.
@@ -23,17 +31,34 @@ public class Joker {
     private String ct;
     private String text;
     private String title;
-    private int type;
+    private String type;
 
     private int readState;//true read  ,false unRead
 
+    public static class JokerDeserializer implements JsonDeserializer<Joker> {
 
+        @Override
+        public Joker deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            Joker joker = new Joker();
+            JsonObject jsonObject = json.getAsJsonObject();
 
+            joker.setTitle(jsonObject.get("title").getAsString());
+            joker.setId(jsonObject.get("id").getAsString());
+            if(jsonObject.has("img")){
+                joker.setText(jsonObject.get("img").getAsString());
 
+            }else{
+                joker.setText(jsonObject.get("text").getAsString());
+            }
+            joker.setCt(jsonObject.get("ct").getAsString());
+            joker.setType(jsonObject.get("type").getAsInt()+"");
 
+            return joker;
+        }
+    }
 
-    @Generated(hash = 826920194)
-    public Joker(String id, String ct, String text, String title, int type, int readState) {
+    @Generated(hash = 332152038)
+    public Joker(String id, String ct, String text, String title, String type, int readState) {
         this.id = id;
         this.ct = ct;
         this.text = text;
@@ -45,11 +70,6 @@ public class Joker {
     @Generated(hash = 1456579416)
     public Joker() {
     }
-
-
-
-
-
 
     public String getCt() {
         return ct;
@@ -75,11 +95,11 @@ public class Joker {
         this.title = title;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 

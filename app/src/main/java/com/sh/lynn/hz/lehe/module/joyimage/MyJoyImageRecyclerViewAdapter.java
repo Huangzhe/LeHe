@@ -12,21 +12,24 @@ import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sh.lynn.hz.lehe.R;
+import com.sh.lynn.hz.lehe.listener.OnImageClickListener;
 
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a and makes a call to the
  * specified
- * TODO: Replace the implementation with code for your data type.
+*
  */
 public class MyJoyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyJoyImageRecyclerViewAdapter.ViewHolder> {
 
     private final List<JoyImage> mValues;
 
+    private OnImageClickListener mListener;
 
-    public MyJoyImageRecyclerViewAdapter(List<JoyImage> items) {
+    public MyJoyImageRecyclerViewAdapter(List<JoyImage> items,OnImageClickListener listener) {
         mValues = items;
+        mListener = listener;
 
     }
 
@@ -38,26 +41,34 @@ public class MyJoyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyJoyIma
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
+    public void onBindViewHolder(final ViewHolder holder,final int position) {
+
         holder.mIdView.setText(mValues.get(position).getTitle());
         //holder.mContentView.setText(mValues.get(position).content);
-        Uri uri = Uri.parse(mValues.get(position).getImg());
+      final  Uri uri = Uri.parse(mValues.get(position).getImg());
 //        DraweeController controller = Fresco.newDraweeControllerBuilder()
 //                .setUri(uri)
 //                .setAutoPlayAnimations(true)
 //
 //                .build();
-       GenericDraweeHierarchy builder= GenericDraweeHierarchyBuilder
-               .newInstance(holder.mView.getResources())
-               .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
-               .setPlaceholderImage(R.mipmap.icon_hun_normal)
-               .build();
+
+        GenericDraweeHierarchy builder= GenericDraweeHierarchyBuilder
+                .newInstance(holder.mView.getResources())
+                .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
+                .setPlaceholderImage(R.mipmap.icon_hun_normal)
+                .build();
 
         holder.mContentView.setHierarchy(builder);
-
-
         holder.mContentView.setImageURI(uri);
+
+
+        holder.mContentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               mListener.onImageInteraction(mValues.get(position));
+
+            }
+        });
 
 
     }
@@ -71,7 +82,7 @@ public class MyJoyImageRecyclerViewAdapter extends RecyclerView.Adapter<MyJoyIma
         public final View mView;
         public final TextView mIdView;
         public final SimpleDraweeView mContentView;
-        public JoyImage mItem;
+
 
         public ViewHolder(View view) {
             super(view);

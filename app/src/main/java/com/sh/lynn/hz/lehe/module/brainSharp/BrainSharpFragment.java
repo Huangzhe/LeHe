@@ -25,7 +25,7 @@ public class BrainSharpFragment extends Fragment implements BrainSharpView{
     private static final String ARG_COLUMN_COUNT = "column-count";
 
     private int mColumnCount = 1;
-//    private OnListFragmentInteractionListener mListener;
+//    private OnImageClickListener mListener;
     RecyclerView recyclerView=null;
     @Inject
      BrainSharpPresenter mPresenter;

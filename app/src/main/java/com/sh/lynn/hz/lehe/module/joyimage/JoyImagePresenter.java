@@ -1,5 +1,7 @@
 package com.sh.lynn.hz.lehe.module.joyimage;
 
+import android.util.Log;
+
 import com.sh.lynn.hz.lehe.base.PreferencesManager;
 import com.sh.lynn.hz.lehe.net.APIManager;
 import com.sh.lynn.hz.lehe.net.SimpleCallback;
@@ -57,6 +59,26 @@ public class JoyImagePresenter implements JoyImageContract.UserActionsListener {
             @Override
             public void onComplete() {
                 mView.closeLoading();
+            }
+        });
+    }
+
+    @Override
+    public void downLoadImage(String path) {
+        mAPIManager.downLoadImg(path, new SimpleCallback<String>() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onNext(String file) {
+                Log.d("downLoadImage",file);
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }
