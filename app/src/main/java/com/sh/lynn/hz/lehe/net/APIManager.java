@@ -45,7 +45,7 @@ public class APIManager {
 
     public void getBrainSharp(String key, SimpleCallback<List<BrainSharp.NewslistBean>> callback) {
 
-        apiService.getBrainSharp(key).flatMap(new Func1<BrainSharp, Observable<List<BrainSharp.NewslistBean>>>() {
+        apiService.getBrainSharp(key, "10").flatMap(new Func1<BrainSharp, Observable<List<BrainSharp.NewslistBean>>>() {
             @Override
             public Observable<List<BrainSharp.NewslistBean>> call(BrainSharp sharp) {
                 if (sharp.getCode() != 200) {
@@ -139,24 +139,32 @@ public class APIManager {
         Observable<JsonObject> joyObservable = apiService.getJokers(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJokerIndex() + "", "20");
 
         //合并三个请求结果
-        return Observable.concat(joyImageObservable,joyObservable,joyGIFObservable)
+        return Observable.concat(joyImageObservable, joyObservable, joyGIFObservable)
 
-                .flatMap(new Func1<JsonObject, Observable<List<Joker>> >() {
+                .flatMap(new Func1<JsonObject, Observable<List<Joker>>>() {
                     @Override
-                    public Observable<List<Joker>>  call(JsonObject json) {
-
+                    public Observable<List<Joker>> call(JsonObject json) {
+                        Log.e("getJokersYY", json.toString());
                         if (json != null && json.get("showapi_res_code").getAsString().equals("0")) {
 
                             mPreferencesManager.saveJokerIndex(mPreferencesManager.getCurJokerIndex() + 1, json.getAsJsonObject("showapi_res_body").get("allPages").getAsInt());
-
                             JsonArray jokerArray = json.getAsJsonObject("showapi_res_body").getAsJsonArray("contentlist");
 
                             if (jokerArray != null) {
-                               //
-                                Gson gson  =  new GsonBuilder().registerTypeAdapter(Joker.class,new Joker.JokerDeserializer()).create();
+                                //
+                                Gson gson = new GsonBuilder().registerTypeAdapter(Joker.class, new Joker.JokerDeserializer()).create();
 
                                 List<Joker> list = gson.fromJson(jokerArray.toString(), new TypeToken<List<Joker>>() {
                                 }.getType());
+                                if (list != null && list.get(0) != null) {
+                                    if (list.get(0).getType().equals("2")) {
+                                        mPreferencesManager.saveJoyImageIndex(mPreferencesManager.getCurJoyImageIndex() + 1, json.getAsJsonObject("showapi_res_body").get("allPages").getAsInt());
+
+                                    } else if (list.get(0).getType().equals("3")) {
+                                        mPreferencesManager.saveJoyGIFIndex(mPreferencesManager.getCurJoyGIFIndex() + 1, json.getAsJsonObject("showapi_res_body").get("allPages").getAsInt());
+
+                                    }
+                                }
                                 return Observable.just(list);
 
                             } else {
@@ -242,7 +250,7 @@ public class APIManager {
                     public Observable<String> call(ResponseBody response) {
 
                         String filePath = CommonUtils.writeResponseBodyToDisk(fileName, response);
-                        Log.d("downLoadImage","downLoadImg:"+filePath);
+                        Log.d("downLoadImage", "downLoadImg:" + filePath);
                         return Observable.just(filePath);
                     }
                 })

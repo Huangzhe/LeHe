@@ -22,8 +22,8 @@ public interface ApiService {
     public static String SERVER_URL = "http://apis.baidu.com/";
 
     //脑筋急转弯
-    @GET("txapi/naowan/naowan")
-    Observable<BrainSharp> getBrainSharp(@Header("apikey") String apikey);
+    @GET("http://api.tianapi.com/txapi/naowan/")
+    Observable<BrainSharp> getBrainSharp(@Query("key") String apikey,@Query("num") String num);
 
     //笑话 百度
     @GET("showapi_open_bus/showapi_joke/joke_text")
@@ -47,6 +47,8 @@ public interface ApiService {
     Observable<BaseResponse<Photos>> getPhotos(@Query("key") String apikey, @Query("num") int num);
     //http://apis.baidu.com/acman/zhaiyanapi/tcrand
 
+    @GET("http://route.showapi.com/197-1/")
+    Observable<BaseResponse<Photos>> getYYPhotos(@Query("showapi_appid") String appid, @Query("showapi_sign") String appsecret,@Query("num") String num,@Query("page") String page);
     //
     @GET("acman/zhaiyanapi/tcrand")
     Observable<Lines> getLines(@Header("apikey") String apikey, @Query("fangfa") String fangfa);

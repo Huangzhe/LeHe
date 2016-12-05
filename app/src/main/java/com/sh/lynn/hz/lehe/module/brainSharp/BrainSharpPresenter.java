@@ -1,7 +1,6 @@
 package com.sh.lynn.hz.lehe.module.brainSharp;
 
 import com.sh.lynn.hz.lehe.net.APIManager;
-import com.sh.lynn.hz.lehe.base.Constant;
 import com.sh.lynn.hz.lehe.net.SimpleCallback;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class BrainSharpPresenter {
     }
 
     public void getData(){
-        apiManager.getBrainSharp(Constant.APIKEY, new SimpleCallback<List<BrainSharp.NewslistBean>>() {
+        apiManager.getBrainSharp("870400af7aa7368475528367c434c959", new SimpleCallback<List<BrainSharp.NewslistBean>>() {
             @Override
             public void onStart() {
                 mBrainSharpView.showLoading();

@@ -1,7 +1,14 @@
 package com.sh.lynn.hz.lehe.net;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+
+import com.facebook.binaryresource.FileBinaryResource;
+import com.facebook.cache.common.SimpleCacheKey;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -109,5 +116,16 @@ public class CommonUtils {
         } catch (IOException e) {
             return "";
         }
+    }
+
+
+    public static  Bitmap getBitmap(Uri uri) {
+
+        Bitmap bitmap = null;
+        FileBinaryResource resource = (FileBinaryResource) Fresco.getImagePipelineFactory().getMainDiskStorageCache().getResource(new SimpleCacheKey(uri.toString()));
+        File file = resource.getFile();
+        bitmap = BitmapFactory.decodeFile(file.getPath());
+        return bitmap;
+
     }
 }

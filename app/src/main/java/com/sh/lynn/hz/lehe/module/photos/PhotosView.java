@@ -12,4 +12,5 @@ public interface PhotosView {
     void showLoading();
 
     void closedLoading();
+    void showEnd(String text);
 }

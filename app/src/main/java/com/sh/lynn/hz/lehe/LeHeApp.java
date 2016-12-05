@@ -9,10 +9,14 @@ import com.sh.lynn.hz.lehe.base.AppModule;
 import com.sh.lynn.hz.lehe.base.DaggerAppComponent;
 import com.sh.lynn.hz.lehe.module.joker.DaoMaster;
 import com.sh.lynn.hz.lehe.module.joker.DaoSession;
+import com.sh.lynn.hz.lehe.module.joker.Joker;
+import com.sh.lynn.hz.lehe.module.joker.JokerDao;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.greendao.database.Database;
+import org.greenrobot.greendao.query.DeleteQuery;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 /**
  * Created by hyz84 on 16/9/8.
@@ -29,11 +33,15 @@ public class LeHeApp  extends Application{
         super.onCreate();
         appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         Fresco.initialize(this);
-        
+
         //greenDao
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "LeHe-db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
+
+        QueryBuilder<Joker> queryBuilder =  daoSession.getJokerDao().queryBuilder();
+        DeleteQuery<Joker> bd = queryBuilder.where(JokerDao.Properties.ReadState.eq(1)).buildDelete();
+        bd.executeDeleteWithoutDetachingEntities();
        // helper.onUpgrade(db,1,2);
         PlatformConfig.setWeixin("wxa2c6d123c9a0cc62", "515f10686ae25d90abf362e1865672cd");
       //  PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad");

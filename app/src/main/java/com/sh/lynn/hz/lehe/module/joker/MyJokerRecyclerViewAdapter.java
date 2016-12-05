@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.sh.lynn.hz.lehe.R;
@@ -25,6 +27,7 @@ import com.sh.lynn.hz.lehe.listener.OnImageClickListener;
 import com.sh.lynn.hz.lehe.net.CommonUtils;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 import java.util.List;
 
@@ -36,16 +39,17 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
     private final List<Joker> mValues;
     private MyUMShareListener mListener;
     private OnImageClickListener mClickListener;
-    private     Activity activity;
-    public MyJokerRecyclerViewAdapter(List<Joker> items,MyUMShareListener listener,OnImageClickListener clickListener) {
+    private Activity activity;
+
+    public MyJokerRecyclerViewAdapter(List<Joker> items, MyUMShareListener listener, OnImageClickListener clickListener) {
         mValues = items;
-        mListener=listener;
-        mClickListener=clickListener;
+        mListener = listener;
+        mClickListener = clickListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        activity = (Activity)parent.getContext();
+        activity = (Activity) parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_joker_list_item, parent, false);
         return new ViewHolder(view);
@@ -55,31 +59,32 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
         holder.tv_title.setText(mValues.get(position).getTitle());
-        String type =  holder.mItem.getType();
-        if("1".equals(type)) {
+        String type = holder.mItem.getType();
+        if ("1".equals(type)) {
             holder.mTextView.setVisibility(View.VISIBLE);
             holder.mTextView.setText(Html.fromHtml(mValues.get(position).getText()));
             holder.mImageView.setVisibility(View.GONE);
-        }else {
+        } else {
 
             holder.mImageView.setVisibility(View.VISIBLE);
             holder.mTextView.setVisibility(View.GONE);
             final Uri uri = Uri.parse(mValues.get(position).getText());
-
-            if("2".equals(type)) {
-
-
+            holder.mImageView.setTag(mValues.get(position).getText());
+            if ("2".equals(type)) {
+                //if(mValues.get(position).getText().equals(holder.mImageView.getTag())){
                 GenericDraweeHierarchy builder = GenericDraweeHierarchyBuilder
                         .newInstance(holder.mView.getResources())
                         .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
                         .setPlaceholderImage(R.mipmap.icon_hun_normal)
                         .build();
                 holder.mImageView.setHierarchy(builder);
+
                 holder.mImageView.setImageURI(uri);
             }
-            if("3".equals(type)) {
-
-                GenericDraweeHierarchy builder = GenericDraweeHierarchyBuilder
+            if ("3".equals(type)) {
+                holder.tv_title.setText("(GIF)" + mValues.get(position).getTitle());
+                // if(mValues.get(position).getText().equals(holder.mImageView.getTag())){
+                final GenericDraweeHierarchy builder = GenericDraweeHierarchyBuilder
                         .newInstance(holder.mView.getResources())
                         .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
                         .setPlaceholderImage(R.mipmap.default_gif)
@@ -90,44 +95,57 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
                     public void onFinalImageSet(
                             String id,
                             @Nullable
-                            ImageInfo imageInfo,
+                                    ImageInfo imageInfo,
                             @Nullable
                                     Animatable anim) {
                         if (anim != null) {
                             // 其他控制逻辑
-                            anim.start();
+                            // builder.setOverlayImage(holder.mView.getResources().getDrawable(R.mipmap.default_gif));
+                            // anim.start();
                         }
+
                     }
                 };
 
 
-//                DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                .setUri(uri)
-//               .setControllerListener(controllerListener)
-//                .build();
-//                holder.mImageView.setController(controller);
+                DraweeController controller = Fresco.newDraweeControllerBuilder()
+                        .setUri(uri)
+                        .setAutoPlayAnimations(false)
+                        .build();
+                holder.mImageView.setController(controller);
 
             }
 
-                holder.mImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mClickListener.onImageInteraction(mValues.get(position));
+            holder.mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onImageInteraction(mValues.get(position));
 
-                    }
-                });
-            }
-
+                }
+            });
+        }
 
 
         holder.iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ShareAction(activity).setPlatform(SHARE_MEDIA.WEIXIN)
-                        .withText(CommonUtils.html2Text(mValues.get(position).getText()))
-                        .withTitle("笑话")
-                        .setCallback(mListener)
-                        .share();
+                String type = mValues.get(position).getType();
+
+                ShareAction shareAction = new ShareAction(activity);
+                shareAction.setPlatform(SHARE_MEDIA.WEIXIN);
+                if ("1".equals(type)) {
+                    shareAction.withText(CommonUtils.html2Text(mValues.get(position).getText()))
+                            .withTitle("笑话")
+                            .setCallback(mListener)
+                            .share();
+                }else{
+
+                    UMImage umImage = new UMImage(activity,CommonUtils.getBitmap(Uri.parse(mValues.get(position).getText())));
+                    shareAction.withMedia(umImage)
+                            .withTitle("笑话")
+                            .setCallback(mListener)
+                            .share();
+                }
             }
         });
     }
@@ -142,16 +160,17 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
         @BindView(R.id.tv_joker)
         TextView mTextView;
         @BindView(R.id.tv_title)
-         TextView tv_title;
+        TextView tv_title;
         @BindView(R.id.iv_share)
         ImageView iv_share;
         public Joker mItem;
         @BindView(R.id.iv_photo)
         SimpleDraweeView mImageView;
+
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            ButterKnife.bind(this,view);
+            ButterKnife.bind(this, view);
 //            mTextView = (TextView) view.findViewById(R.id.tv_joker);
 //            tv_title =(TextView) view.findViewById(tv_title);
 

@@ -47,7 +47,6 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
     @Override
     public void getJokers() {
 
-        jokerList.clear();
 
         int index = mPreferencesManager.getCurJokerIndex();
         int total = mPreferencesManager.getJokerTotal();
@@ -80,7 +79,7 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
 //                    }
 //                });
 
-                jokerList.addAll(jokers);
+               // jokerList.addAll(jokers);
 
             }
 
@@ -95,7 +94,7 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
 
     @Override
     public void loadMoreJokers() {
-        jokerList.clear();
+
         final int index = 0;
         QueryBuilder<Joker> queryBuilder = jokerDao.getDao().queryBuilder();
         final long total = queryBuilder.where(JokerDao.Properties.ReadState.eq(0)).count();
@@ -114,22 +113,23 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
      *
      */
     private void loadDadaFromDB() {
-        Observable<List<Joker>> jokerObser = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct)
+        jokerList.clear();
+        Observable<List<Joker>> jokerObser = mDaoSession.getJokerDao().queryBuilder()
                 .where(JokerDao.Properties.Type.eq("1"))
                 .where(JokerDao.Properties.ReadState.eq(0))
                 .limit(10)
                 .rx()
                 .list();
-        Observable<List<Joker>> imgObser = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct)
+        Observable<List<Joker>> imgObser = mDaoSession.getJokerDao().queryBuilder()
                 .where(JokerDao.Properties.Type.eq("2"))
                 .where(JokerDao.Properties.ReadState.eq(0))
-                .limit(3)
+                .limit(2)
                 .rx()
                 .list();
-        Observable<List<Joker>> gifObser = mDaoSession.getJokerDao().queryBuilder().orderDesc(JokerDao.Properties.Ct)
+        Observable<List<Joker>> gifObser = mDaoSession.getJokerDao().queryBuilder()
                 .where(JokerDao.Properties.Type.eq("3"))
                 .where(JokerDao.Properties.ReadState.eq(0))
-                .limit(2)
+                .limit(1)
                 .rx()
                 .list();
 //合并所有查询结果
@@ -138,6 +138,9 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
                 .subscribe(new Subscriber<List<Joker>>() {
                     @Override
                     public void onCompleted() {
+
+                        Log.d("loadMoreJokers", "jokerList= " + jokerList.size());
+
                         mView.showJokerList(jokerList);
                         changJokerStatue(jokerList);
                     }
@@ -149,7 +152,7 @@ public class JokerPresenter implements JokerContract.UserActionsListener {
 
                     @Override
                     public void onNext(List<Joker> jokers) {
-                        Log.d("loadMoreJokers", "jokers= " + jokers.size());
+
                         jokerList.addAll(jokers);
                     }
 
