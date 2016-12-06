@@ -8,9 +8,11 @@ import android.util.Log;
 
 import com.facebook.binaryresource.FileBinaryResource;
 import com.facebook.cache.common.SimpleCacheKey;
+import com.facebook.common.file.FileUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -128,4 +130,38 @@ public class CommonUtils {
         return bitmap;
 
     }
+
+    public static void saveImage(Uri uri,String fileName){
+        FileBinaryResource resource = (FileBinaryResource) Fresco.getImagePipelineFactory().getMainDiskStorageCache().getResource(new SimpleCacheKey(uri.toString()));
+        File file = resource.getFile();
+
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+
+
+        String dir =  Environment.getExternalStorageDirectory().getAbsolutePath()+"/LeHe/image/";
+        File dirs = new File(dir);
+        try {
+            FileUtils.mkdirs(dirs);
+        } catch (FileUtils.CreateDirectoryException e) {
+            e.printStackTrace();
+        }
+        File taget = new File(dir,fileName);
+
+        try {
+            FileOutputStream out = new FileOutputStream(taget);
+           boolean b = bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+            Log.i(TAG, "已经保存"+b);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+
 }

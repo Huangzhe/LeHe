@@ -13,6 +13,17 @@
         android:layout_height="match_parent"
 
         />
-
+<Button
+    android:visibility="gone"
+    android:layout_marginBottom="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_gravity="bottom|right"
+    android:text="保存"
+    android:textColor="@android:color/white"
+    android:textSize="16sp"
+    android:id="@+id/btn_save"
+    android:background="@drawable/btn_save_selector"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
 
 </FrameLayout>

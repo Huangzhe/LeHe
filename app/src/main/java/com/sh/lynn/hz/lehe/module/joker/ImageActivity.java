@@ -22,6 +22,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.image.QualityInfo;
 import com.sh.lynn.hz.lehe.R;
+import com.sh.lynn.hz.lehe.net.CommonUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +35,7 @@ import butterknife.OnClick;
 public class ImageActivity extends Activity {
     @BindView(R.id.iv_photo)
     SimpleDraweeView mDraweeView;
+    String  imageUrl ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class ImageActivity extends Activity {
 
         Intent intent = getIntent();
 
-        String imageUrl = intent.getStringExtra("ImageUrl");
+         imageUrl = intent.getStringExtra("ImageUrl");
         String imageType = intent.getStringExtra("ImageType");
         Uri uri = Uri.parse(imageUrl);
 
@@ -121,7 +123,16 @@ public class ImageActivity extends Activity {
 
     @OnClick(R.id.iv_photo)
     public void onClick() {
+
         finish();
+    }
+
+    @OnClick(R.id.btn_save)
+    public void onSave(){
+
+        int index = imageUrl.lastIndexOf("/");
+         String fileName = imageUrl.substring(index);
+        CommonUtils.saveImage(Uri.parse(imageUrl),fileName);
     }
 
 
