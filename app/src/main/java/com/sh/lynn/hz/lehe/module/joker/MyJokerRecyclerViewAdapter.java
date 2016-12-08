@@ -61,6 +61,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
         holder.tv_title.setText(mValues.get(position).getTitle());
         String type = holder.mItem.getType();
         if ("1".equals(type)) {
+            holder.iv_share.setVisibility(View.VISIBLE);
             holder.mTextView.setVisibility(View.VISIBLE);
             holder.mTextView.setText(Html.fromHtml(mValues.get(position).getText()));
             holder.mImageView.setVisibility(View.GONE);
@@ -71,6 +72,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
             final Uri uri = Uri.parse(mValues.get(position).getText());
             holder.mImageView.setTag(mValues.get(position).getText());
             if ("2".equals(type)) {
+                holder.iv_share.setVisibility(View.VISIBLE);
                 //if(mValues.get(position).getText().equals(holder.mImageView.getTag())){
                 GenericDraweeHierarchy builder = GenericDraweeHierarchyBuilder
                         .newInstance(holder.mView.getResources())
@@ -82,6 +84,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
                 holder.mImageView.setImageURI(uri);
             }
             if ("3".equals(type)) {
+                holder.iv_share.setVisibility(View.GONE);
                 holder.tv_title.setText("(GIF)" + mValues.get(position).getTitle());
                 // if(mValues.get(position).getText().equals(holder.mImageView.getTag())){
                 final GenericDraweeHierarchy builder = GenericDraweeHierarchyBuilder
@@ -131,20 +134,80 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
             public void onClick(View v) {
                 String type = mValues.get(position).getType();
 
-                ShareAction shareAction = new ShareAction(activity);
+                final ShareAction shareAction = new ShareAction(activity);
                 shareAction.setPlatform(SHARE_MEDIA.WEIXIN);
                 if ("1".equals(type)) {
                     shareAction.withText(CommonUtils.html2Text(mValues.get(position).getText()))
                             .withTitle("笑话")
                             .setCallback(mListener)
                             .share();
-                }else{
+                } else if ("2".equals(type)) {
 
-                    UMImage umImage = new UMImage(activity,CommonUtils.getBitmap(Uri.parse(mValues.get(position).getText())));
+
+                    UMImage umImage = new UMImage(activity, CommonUtils.getBitmap(Uri.parse(mValues.get(position).getText())));
                     shareAction.withMedia(umImage)
                             .withTitle("笑话")
                             .setCallback(mListener)
                             .share();
+                } else if ("3".equals(type)) {
+
+//                    int index = mValues.get(position).getText().lastIndexOf("/");
+//                    final String fileName = mValues.get(position).getText().substring(index);
+//                    FrescoUtil.saveGif(mValues.get(position).getText(), activity, new BaseDataSubscriber<CloseableReference<PooledByteBuffer>>() {
+//
+//
+//                        @Override
+//                        protected void onNewResultImpl(DataSource<CloseableReference<PooledByteBuffer>> dataSource) {
+//                            if (dataSource.isFinished()) {
+//                                CloseableReference<PooledByteBuffer> ref = dataSource.getResult();
+//                                if (ref != null) {
+//                                    try {
+//                                        PooledByteBuffer result = ref.get();
+//                                        InputStream is = new PooledByteBufferInputStream(result);
+//                                        try {
+////
+//                                            ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+//                                            byte[] b = new byte[1000];
+//                                            int n;
+//                                            while ((n = is.read(b)) != -1) {
+//                                                bos.write(b, 0, n);
+//                                            }
+//                                            is.close();
+//                                            bos.close();
+//                                            FrescoUtil.savePic(fileName, bos);//通过byte文件头，判断是否是gif，再做相应的命名处理
+//
+//
+//                                        } catch (Exception e) {
+//                                        } finally {
+//                                            Closeables.closeQuietly(is);
+//                                        }
+//                                    } finally {
+//                                        CloseableReference.closeSafely(ref);
+//                                        ref = null;
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        protected void onFailureImpl(DataSource dataSource) {
+//
+//                        }
+//                    });
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//
+//
+//                    UMImage umImage = new UMImage(activity, new File(FrescoUtil.IMAGE_PIC_CACHE_DIR, fileName));
+//                    shareAction.withMedia(umImage)
+//                            .withTitle("笑话")
+//                            .setCallback(mListener)
+//                            .share();
                 }
             }
         });

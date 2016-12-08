@@ -134,8 +134,8 @@ public class APIManager {
 
     public Subscription getJokersYY(final PreferencesManager mPreferencesManager, SimpleCallback<List<Joker>> callback) {
 
-        Observable<JsonObject> joyImageObservable = apiService.getJoyImage(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJoyImageIndex() + "", "5");
-        Observable<JsonObject> joyGIFObservable = apiService.getJoyGIF(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJoyGIFIndex() + "", "5");
+        Observable<JsonObject> joyImageObservable = apiService.getJoyImage(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJoyImageIndex() + "", "2");
+        Observable<JsonObject> joyGIFObservable = apiService.getJoyGIF(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJoyGIFIndex() + "", "2");
         Observable<JsonObject> joyObservable = apiService.getJokers(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN, mPreferencesManager.getCurJokerIndex() + "", "20");
 
         //合并三个请求结果

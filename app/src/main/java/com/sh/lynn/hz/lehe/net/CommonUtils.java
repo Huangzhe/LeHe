@@ -10,6 +10,7 @@ import com.facebook.binaryresource.FileBinaryResource;
 import com.facebook.cache.common.SimpleCacheKey;
 import com.facebook.common.file.FileUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipeline;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -163,5 +164,9 @@ public class CommonUtils {
 
     }
 
+public static void save(){
+   ImagePipeline imagePipeline =  Fresco.getImagePipeline();
+
+  }
 
 }
