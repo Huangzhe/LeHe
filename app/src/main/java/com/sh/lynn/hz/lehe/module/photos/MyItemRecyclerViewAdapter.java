@@ -53,7 +53,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         GenericDraweeHierarchy builder= GenericDraweeHierarchyBuilder
                 .newInstance(holder.mView.getResources())
                 .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
-                .setPlaceholderImage(R.mipmap.icon_hun_normal)
+                .setPlaceholderImage(R.mipmap.icon_hun_norma)
                 .build();
         holder.iv_photo.setHierarchy(builder);
         holder.iv_photo.setImageURI(uri);

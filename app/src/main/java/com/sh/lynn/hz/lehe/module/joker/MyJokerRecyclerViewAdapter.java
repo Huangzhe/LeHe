@@ -77,7 +77,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
                 GenericDraweeHierarchy builder = GenericDraweeHierarchyBuilder
                         .newInstance(holder.mView.getResources())
                         .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
-                        .setPlaceholderImage(R.mipmap.icon_hun_normal)
+                        .setPlaceholderImage(R.mipmap.loading)
                         .build();
                 holder.mImageView.setHierarchy(builder);
 
@@ -90,7 +90,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
                 final GenericDraweeHierarchy builder = GenericDraweeHierarchyBuilder
                         .newInstance(holder.mView.getResources())
                         .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
-                        .setPlaceholderImage(R.mipmap.default_gif)
+                        .setPlaceholderImage(R.mipmap.loading)
                         .build();
                 holder.mImageView.setHierarchy(builder);
                 ControllerListener controllerListener = new BaseControllerListener<ImageInfo>() {
@@ -106,6 +106,9 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
                             // builder.setOverlayImage(holder.mView.getResources().getDrawable(R.mipmap.default_gif));
                             // anim.start();
                         }
+                        if(imageInfo!=null){
+
+                        }
 
                     }
                 };
@@ -113,6 +116,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
 
                 DraweeController controller = Fresco.newDraweeControllerBuilder()
                         .setUri(uri)
+
                         .setAutoPlayAnimations(false)
                         .build();
                 holder.mImageView.setController(controller);
@@ -126,6 +130,7 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
 
                 }
             });
+
         }
 
 
@@ -227,6 +232,9 @@ public class MyJokerRecyclerViewAdapter extends RecyclerView.Adapter<MyJokerRecy
         @BindView(R.id.iv_share)
         ImageView iv_share;
         public Joker mItem;
+//        @BindView(R.id.bottle_view)
+//        GABottleLoadingView mLoadingView;
+
         @BindView(R.id.iv_photo)
         SimpleDraweeView mImageView;
 

@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -58,13 +57,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder setImageUrl(int viewId, Context context, String url){
         ImageView view = getView(viewId);
-        Glide.with(context).load(url).into(view);
+//        Glide.with(context).load(url).into(view);
         return this;
     }
 
     public BaseViewHolder setImageUrl(int viewId, Fragment context, String url){
         ImageView view = getView(viewId);
-        Glide.with(context).load(url).into(view);
+//        Glide.with(context).load(url).into(view);
         return this;
     }
 
