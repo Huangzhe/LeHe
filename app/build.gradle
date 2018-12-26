@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'org.greenrobot.greendao'
 //apply plugin: 'com.android.library'
 //apply plugin: 'com.jakewharton.butterknife'
 android {
-    compileSdkVersion 23
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.sh.lynn.hz.lehe"
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -44,7 +43,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.google.guava:guava:$rootProject.guavaVersion"
+//    compile "com.google.guava:guava:$rootProject.guavaVersion"
 //    compile files('libs/SocialSDK_umengqq.jar')
 //    compile files('libs/SocialSDK_umengsina.jar')
 //    compile files('libs/SocialSDK_umengwx.jar')
@@ -70,7 +69,7 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.12.0'
     compile 'com.facebook.fresco:animated-gif:0.12.0'
 
-    compile 'org.greenrobot:greendao:3.2.0'
+    compile 'org.greenrobot:greendao:3.2.2'
     compile 'com.android.support:support-vector-drawable:23.4.0'
 
     testCompile 'junit:junit:4.12'

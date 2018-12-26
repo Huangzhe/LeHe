@@ -2,6 +2,7 @@ package com.sh.lynn.hz.lehe.net;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,6 +17,8 @@ import com.sh.lynn.hz.lehe.module.joyimage.JoyImage;
 import com.sh.lynn.hz.lehe.module.lines.Lines;
 import com.sh.lynn.hz.lehe.module.photos.Photos;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -76,6 +79,25 @@ public class APIManager {
     }
 
 
+    public void getLine(String key,  SimpleCallback<String> callback){
+        apiService.getLine(key, "10").flatMap(new Func1<ResponseBody, Observable<String>>() {
+            @Override
+            public Observable<String> call(ResponseBody response) {
+
+
+                try {
+                    Log.d("getLine", "getLine:" + response.string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return Observable.just("getLine");
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ExceptionSubscriber<String>(callback, application));
+    }
+
     public Subscription getLines(SimpleCallback<Lines> callback) {
         return apiService.getLines(Constant.APIKEY, "json").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,8 +123,9 @@ public class APIManager {
         return call;
     }
 
+
     public Subscription getJokers(final PreferencesManager mPreferencesManager, SimpleCallback<List<Joker>> callback) {
-        return apiService.getJokersYY(Constant.APIKEY, mPreferencesManager.getCurJokerIndex() + "")
+        return apiService.getJokers(Constant.APIKEY, mPreferencesManager.getCurJokerIndex() )
                 .flatMap(new Func1<JsonObject, Observable<List<Joker>>>() {
                     @Override
                     public Observable<List<Joker>> call(JsonObject json) {

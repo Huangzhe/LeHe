@@ -42,16 +42,23 @@ public interface ApiService {
     Observable<JsonObject> getJoyGIF(@Query("showapi_appid") String appid, @Query("showapi_sign") String appsecret,@Query("page") String page,@Query("maxResult") String num);
 
 
-    //笑话 @Query("rand") int rand, @Query("word") String word,@Query("page") int page
+    //美女图片
     @GET("http://api.tianapi.com/meinv/")
     Observable<BaseResponse<Photos>> getPhotos(@Query("key") String apikey, @Query("num") int num);
     //http://apis.baidu.com/acman/zhaiyanapi/tcrand
+    //笑话
+    @GET("http://api.tianapi.com/txapi/joke/")
+    Observable<JsonObject> getJokers(@Query("key") String apikey, @Query("num") int num);
+
 
     @GET("http://route.showapi.com/197-1/")
     Observable<BaseResponse<Photos>> getYYPhotos(@Query("showapi_appid") String appid, @Query("showapi_sign") String appsecret,@Query("num") String num,@Query("page") String page);
     //
     @GET("acman/zhaiyanapi/tcrand")
     Observable<Lines> getLines(@Header("apikey") String apikey, @Query("fangfa") String fangfa);
+
+    @GET("http://api.tianapi.com/txapi/joke/")
+    Observable<ResponseBody> getLine(@Query("key") String apikey,@Query("num") String num);
 
     @GET("acman/zhaiyanapi/tcrand")
     Call<Lines> getWords(@Header("apikey") String apikey, @Query("fangfa") String fangfa);

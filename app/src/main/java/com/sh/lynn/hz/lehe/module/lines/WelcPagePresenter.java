@@ -26,34 +26,49 @@ public class WelcPagePresenter {
 
     public void getWelcWord(){
         mTimer = new Timer();
-
-       final Subscription subscription = apiManager.getLines(new SimpleCallback<Lines>() {
+        apiManager.getLine("870400af7aa7368475528367c434c959", new SimpleCallback<String>() {
             @Override
             public void onStart() {
-                mWelcPageView.showLoading();
 
             }
 
             @Override
-            public void onNext(Lines lines) {
-                if(lines!=null) {
-                    Log.e("result", lines.getTaici());
-                    mWelcPageView.setWelcWord(lines.getTaici());
-                }
-               // goToMainView();
+            public void onNext(String s) {
+                Log.d("getWelcWord",s);
             }
 
             @Override
             public void onComplete() {
-                mWelcPageView.closedLoading();
+
             }
         });
+//       final Subscription subscription = apiManager.getLines(new SimpleCallback<Lines>() {
+//            @Override
+//            public void onStart() {
+//                mWelcPageView.showLoading();
+//
+//            }
+//
+//            @Override
+//            public void onNext(Lines lines) {
+//                if(lines!=null) {
+//                    Log.e("result", lines.getTaici());
+//                    mWelcPageView.setWelcWord(lines.getTaici());
+//                }
+//               // goToMainView();
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//                mWelcPageView.closedLoading();
+//            }
+//        });
 
        // apiManager.getWords()
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-              subscription.unsubscribe();
+//              subscription.unsubscribe();
                // call.cancel();
                 goToMainView();
             }
